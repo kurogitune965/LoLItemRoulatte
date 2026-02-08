@@ -967,9 +967,9 @@ footer {
           <label class="checkbox"><input id="isRoleRoulette" type="checkbox" checked> レーン </label>
         </div>
         <div class="lane-checkbox">
-          <label class="checkbox"><input id="addTop" type="checkbox"> Top</label>
-          <label class="checkbox"><input id="addJG" type="checkbox"> JG</label>
-          <label class="checkbox"><input id="addMid" type="checkbox"> Mid</label>
+          <label class="checkbox"><input id="addTop" type="checkbox" checked> Top</label>
+          <label class="checkbox"><input id="addJG" type="checkbox" checked> JG</label>
+          <label class="checkbox"><input id="addMid" type="checkbox" checked> Mid</label>
           <label class="checkbox"><input id="addBot" type="checkbox" checked> Bot</label>
           <label class="checkbox"><input id="addSup" type="checkbox" checked> Sup</label>
         </div>
@@ -984,6 +984,7 @@ footer {
         <label class="checkbox"><input id="isItemRoulette" type="checkbox" checked> アイテム</label>
         <label class="checkbox"><input id="isLuckyItemToPool" type="checkbox" checked> ラッキーアイテム</label>
         <label class="checkbox"><input id="isAddNoSynergyItem" type="checkbox" checked> シナジーアイテムのみ</label>
+        <label class="checkbox"><input id="isMayhemMode" type="checkbox" checked> メイヘムモード</label>
       </div>
     </div>
   </div>
@@ -1731,7 +1732,7 @@ const ITEMS = [
   { name:"バンシー ヴェール", isSpellSheild:true,
    stats: ["AP", "MR"],
    img:"img/Items/Banshee's_Veil.png"},
-  { name:"バスティオンブレイカー",
+  { name:"バスティオンブレイカー", isSummonersRiftOnly:true,
    stats: ["AD", "Lethality", "AH"],
    img:"img/Items/Bastionbreaker.png"},
   { name:"ブラック クリーバー", isArmorPenetration:true, 
@@ -1875,7 +1876,7 @@ const ITEMS = [
   { name:"マルモティウスの胃袋", isLifeline:true,
    stats: ["AD", "MR", "AH", "Omnivamp"],
    img:"img/Items/Maw_Of_Malmortius.png"},
-  { name:"メジャイ ソウルスティーラー",
+  { name:"メジャイ ソウルスティーラー", isSummonersRiftOnly:true,
    stats: ["HP", "AP", "MS"],
    img:"img/Items/Mejai's_Soulstealer.png"},
   { name:"マーキュリアル シミター",
@@ -2041,6 +2042,20 @@ const ITEMS = [
   //ラッキーアイテム
   { name:"Your Lucky!!", isLuckyItem:true,
    img:"img/Lucky/Bee_Happy_Emote.png"},
+
+  //メイヘムアイテム
+  { name:"アトマの報い", isMayhemItem:true, //Atma's Reckoning
+   stats: ["HP", "Crit"],
+   img:"img/Items/Mayhem_Items/Atmas_Reckoning.png"},
+  { name:"スペクトラル カトラス", isMayhemItem:true, //Spectral Cutlass
+   stats: ["AD", "Lethality", "MS"],
+   img:"img/Items/Mayhem_Items/Spectral_Cutlass.png"},
+  { name:"破滅の儀式", isMayhemItem:true, //Rite of Ruin
+   stats: ["AP", "AH"], //Crit メイジに弾かれない為に便宜上Critは入れない
+   img:"img/Items/Mayhem_Items/Rite_of_Ruin.png"},
+  { name:"花咲く夜明けの剣", isMayhemItem:true, //Sword of Blossoming Dawn
+   stats: ["AP", "AH", "HP", "H/S_Power"],
+   img:"img/Items/Mayhem_Items/Sword_of_Blossoming_Dawn.png"},
 ];
 
 /* --- ルーンリスト --- */
@@ -2169,7 +2184,7 @@ const RUNES = [
   {name:"アフターショック", 
     isKeystone : true, type: "Resolve",
     img: "img/Rune/Keystone/Keystone_Aftershock.png"},
-  {name:"ガーディアン", 
+  {name:"ガーディアン", isSummonersRiftOnly:true,
     isKeystone : true, type: "Resolve",
     img: "img/Rune/Keystone/Keystone_Guardian.png"},
   {name:"打ちこわし", 
@@ -2270,15 +2285,20 @@ const RUNES = [
 
 /* ---  サモナースペルリスト --- */
 const SUMMONERSPELLS = [
-  {name:"バリア", img: "img/SummonerSpell/Barrier.png"},
-  {name:"クレンズ",  img: "img/SummonerSpell/Cleanse.png"},
-  {name:"イグゾースト", img: "img/SummonerSpell/Exhaust.png"},
-  {name:"フラッシュ", img: "img/SummonerSpell/Flash.png"},
-  {name:"ゴースト", img: "img/SummonerSpell/Ghost.png"},
-  {name:"ヒール", img: "img/SummonerSpell/Heal.png"},
-  {name:"イグナイト", img: "img/SummonerSpell/Ignite.png"},
-  {name:"スマイト", isJungle:true, img: "img/SummonerSpell/Smite.png"},
-  {name:"テレポート", img: "img/SummonerSpell/Teleport.png"},
+  {name:"バリア", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Barrier.png"},
+  {name:"クレンズ", isSummonersRift:true, isMayhem:true,  img: "img/SummonerSpell/Cleanse.png"},
+  {name:"ゴースト", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Ghost.png"},
+  {name:"ヒール", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Heal.png"},
+  {name:"イグナイト", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Ignite.png"},
+  {name:"フラッシュ", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Flash.png"},
+
+  {name:"テレポート", isSummonersRift:true, img: "img/SummonerSpell/Teleport.png"},
+  {name:"イグゾースト", isSummonersRift:true, img: "img/SummonerSpell/Exhaust.png"},
+  {name:"スマイト", isJungle:true, isSummonersRift:true, img: "img/SummonerSpell/Smite.png"},
+
+  //メイヘムサモナースペル
+  {name:"マーク", isMayhem:true, img: "img/SummonerSpell/Mark.png"},
+  {name:"クラリティ", isMayhem:true, img: "img/SummonerSpell/Clarity.png"},
 ];
 
 /* ---  グローバル --- */
@@ -2310,6 +2330,7 @@ const isStartItemRoulette = document.getElementById('isStartItemRoulette');
 const isItemRoulette = document.getElementById('isItemRoulette');
 const isLuckyItemToPool = document.getElementById('isLuckyItemToPool');
 const isAddNoSynergyItem = document.getElementById('isAddNoSynergyItem');
+const isMayhemMode = document.getElementById('isMayhemMode');
 const genBuildBtn = document.getElementById('genBuildBtn');
 
 const addTop = document.getElementById('addTop');
@@ -2589,29 +2610,42 @@ function rouletteSummonerSpell() {
   if (isSummonerSpellRoulette && !isSummonerSpellRoulette.checked) {
     return;
   }
-
+  
   //サモナースペル決定用のプール作成
-  const pool = [...currentSummonerSpells];
+  let pool = [...currentSummonerSpells];
   const selected = [];
   
-  //JGがスマイトを持つための処理
-  if (selectedRole != null && selectedRole.name == "JG") {
-    const smitePool = pool.filter(i => i.isJungle);
-
-    if (smitePool.length > 0) {
-      const sIdx = Math.floor(Math.random() * smitePool.length);
-      selected.push(smitePool.splice(sIdx, 1)[0]);
+  if(isMayhemMode.checked){
+    //ルーンのプールから抽選
+    if (pool.length > 0) {
+      pool = pool.filter(i => i.isMayhem);
+      while (selected.length < 2 && pool.length > 0){
+        const idx = Math.floor(Math.random() * pool.length);
+        selected.push(pool.splice(idx, 1)[0]);
+      }
     }
   }
-
-  //ルーンのプールから抽選
-  if (pool.length > 0) {
-    const SummonerSpells = pool.filter(i => !i.isJungle)
-    while (selected.length < 2 && SummonerSpells.length > 0){
-      const idx = Math.floor(Math.random() * SummonerSpells.length);
-      selected.push(SummonerSpells.splice(idx, 1)[0]);
+  else{
+    pool = pool.filter(i => i.isSummonersRift);
+    //JGがスマイトを持つための処理
+    if (selectedRole != null && selectedRole.name == "JG") {
+      const smitePool = pool.filter(i => i.isJungle);
+    
+      if (smitePool.length > 0) {
+        const sIdx = Math.floor(Math.random() * smitePool.length);
+        selected.push(smitePool.splice(sIdx, 1)[0]);
+      }
+    }
+    //ルーンのプールから抽選
+    if (pool.length > 0) {
+      const SummonerSpells = pool.filter(i => !i.isJungle)
+      while (selected.length < 2 && SummonerSpells.length > 0){
+        const idx = Math.floor(Math.random() * SummonerSpells.length);
+        selected.push(SummonerSpells.splice(idx, 1)[0]);
+      }
     }
   }
+  
   return selected;
 }
 function DrawSummonerSpell(selected){
@@ -2695,6 +2729,13 @@ function rouletteBuild() {
   //アイテム決定用のプール作成
   let pool = [...currentItems];
   const build = [];
+  
+  if(!isMayhemMode.checked){
+    pool = pool.filter(i => !i.isMayhemItem);
+  }
+  else{
+    pool = pool.filter(i => !i.isSummonersRiftOnly);
+  }
 
   if(isAddNoSynergyItem.checked){
     if(charData != null)
@@ -2716,7 +2757,7 @@ function rouletteBuild() {
   }
 
   //サポートアイテムの抽選
-  if (selectedRole != null && selectedRole.name == "Sup") {
+  if (selectedRole != null && selectedRole.name == "Sup" && !isMayhemMode) {
     const supportPool = pool.filter(i => i.isSupport && !i.isStartitem);
 
     if (supportPool.length > 0) {
@@ -2776,11 +2817,13 @@ function rouletteBuild() {
         
     }
   }
-
-  //v26.1以降のBotロール用の追加アイテムの抽選
-  if (selectedRole != null && selectedRole.name == "Bot"){
-    const idx = Math.floor(Math.random() * pool.length);
-    build.push(pool.splice(idx, 1)[0]);
+  
+  if(!isMayhemMode.checked){
+    //v26.1以降のBotロール用の追加アイテムの抽選
+    if (selectedRole != null && selectedRole.name == "Bot"){
+      const idx = Math.floor(Math.random() * pool.length);
+      build.push(pool.splice(idx, 1)[0]);
+    }
   }
   
   return build;
@@ -2887,6 +2930,10 @@ function createRow(cards) {
   const div = document.createElement('div');
   div.style.display = 'flex';
   div.style.justifyContent = 'center';
+  
+  if(isMayhemMode.checked){
+    div.style.marginLeft = '30px';
+  }
   div.style.gap = '10px';
   cards.forEach(it => {
     const card = document.createElement('div');
@@ -2983,7 +3030,9 @@ function drawSet(set, index) {
   build.className = "build";
 
   campion_Role.appendChild(character);
-  campion_Role.appendChild(role);
+  if(!isMayhemMode.checked){ 
+    campion_Role.appendChild(role);
+  }
   character.appendChild(DrawCharacter(set.Character));
   role.appendChild(DrawRole(set.Role));
 
@@ -3002,7 +3051,9 @@ function drawSet(set, index) {
   SummonerSpell_Items.appendChild(startItem);
   SummonerSpell_Items.appendChild(build);
   summonerSpell.appendChild(DrawSummonerSpell(set.SummonerSpell));
-  startItem.appendChild(DrawStartItem(set.StartItem));
+  if(!isMayhemMode.checked){
+    startItem.appendChild(DrawStartItem(set.StartItem));
+  }
   build.appendChild(DrawBuild(set.Build));
 
   LoLItemRouletteUI.appendChild(campion_Role);
