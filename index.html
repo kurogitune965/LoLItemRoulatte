@@ -53,6 +53,8 @@ h1 {
   grid-template-columns: repeat(5, 1fr);
   margin-right: auto;
   gap: 4px 4px;
+  width: 600px;
+  height: 20px;
 }
 .lane-ui{
   display:flex;
@@ -68,7 +70,7 @@ h1 {
   grid-template-columns: repeat(6, 1fr);
   margin-right: auto;
   gap: 2px 4px;
-  width: 450px;
+  width: 600px;
   height: 20px;
   justify-content:space-between ;
 }
@@ -284,8 +286,8 @@ button.secondary {
 .rune-card{
   border-radius:10px;
   border:0px solid rgba(255, 255, 255, 0);
-  width:250px;
-  height:250px;
+  width:240px;
+  height:240px;
   gap: 10px;
   overflow:hidden;
   text-align:center;
@@ -302,7 +304,6 @@ button.secondary {
   overflow:hidden;
   text-align:center;
   transition:transform .15s ease, box-shadow .15s ease;
-  box-shadow:0 6px 18px rgba(0,0,0,0.35);
 }
 .runeshard-card{
   background:#07102200;
@@ -315,7 +316,6 @@ button.secondary {
   overflow:hidden;
   text-align:center;
   transition:transform .15s ease, box-shadow .15s ease;
-  box-shadow:0 6px 18px rgba(0,0,0,0.35);
 }
 .rune-card img{
   width:100%;
@@ -388,7 +388,7 @@ button.secondary {
 .startItem-card,
 .item-card {
   border-radius:10px;
-  border:5px solid rgba(1, 113, 117, 0.163);
+  border:5px solid rgb(0, 65, 67);
   width:100px;
   height:100px;
   justify-content:flex-start;
@@ -976,6 +976,7 @@ footer {
       </div>
       <div class="right-ui">
         <label class="checkbox"><input id="isCharacterRoulette" type="checkbox" checked> キャラクター</label>
+        <input type="text" id="ChampionFind" placeholder="チャンピオン名を入力"/>
         <label class="checkbox"><input id="isRuneRoulette" type="checkbox" checked> ルーン</label>
         <label class="checkbox"><input id="isSummonerSpellRoulette" type="checkbox" checked> サモナースペル</label>
       </div>
@@ -984,7 +985,7 @@ footer {
         <label class="checkbox"><input id="isItemRoulette" type="checkbox" checked> アイテム</label>
         <label class="checkbox"><input id="isLuckyItemToPool" type="checkbox" checked> ラッキーアイテム</label>
         <label class="checkbox"><input id="isAddNoSynergyItem" type="checkbox" checked> シナジーアイテムのみ</label>
-        <label class="checkbox"><input id="isMayhemMode" type="checkbox" checked> メイヘムモード</label>
+        <label class="checkbox"><input id="isMayhemMode" type="checkbox"> メイヘムモード</label>
       </div>
     </div>
   </div>
@@ -1798,7 +1799,7 @@ const ITEMS = [
   { name:"フローズン ハート",
    stats: ["AR", "Mana", "AH"],
    img:"img/Items/Frozen_Heart.png"},
-  { name:"ガーディアン エンジェル",
+  { name:"ガーディアン エンジェル", isSummonersRiftOnly:true,
    stats: ["AD", "AR"],
    img:"img/Items/Guardian_Angel.png"},
   { name:"グインソー レイジブレード",
@@ -2184,7 +2185,7 @@ const RUNES = [
   {name:"アフターショック", 
     isKeystone : true, type: "Resolve",
     img: "img/Rune/Keystone/Keystone_Aftershock.png"},
-  {name:"ガーディアン", isSummonersRiftOnly:true,
+  {name:"ガーディアン",
     isKeystone : true, type: "Resolve",
     img: "img/Rune/Keystone/Keystone_Guardian.png"},
   {name:"打ちこわし", 
@@ -2393,25 +2394,46 @@ function DrawRole(selected){
 
 /* --- キャラクター決定 --- */
 function rouletteCharacter() {
-  //抽選しない
-  if (isCharacterRoulette && !isCharacterRoulette.checked) {
-    return;
+   if (isCharacterRoulette && !isCharacterRoulette.checked) {
+    return null;
   }
 
-  //キャラクター決定用のプール作成
-  const pool = [...currentCharacters];
+  let pool = [...currentCharacters];
   const selected = [];
 
-  //キャラクターのプールから抽選
-  if (pool.length > 0) {
-    const idx = Math.floor(Math.random() * pool.length);
-    selected.push(pool.splice(idx, 1)[0]);
+  const champName = document.getElementById("ChampionFind").value.trim().toLowerCase();
+
+  if (champName != "") {
+    const matches = pool.filter(ch => {
+      const name = (ch.name || "").toLowerCase();
+      const img = (ch.img || "").toLowerCase();
+      return (
+        name.includes(champName) ||
+        img.includes(champName));
+    });
+
+    //入力された文字列に応じてチャンピオンを探す
+    if (matches.length == 0) {
+      console.log("該当チャンピオンなし");
+    }
+    else {
+      pool = matches;
+    }
   }
-  
+
+  if (pool.length > 0 && selected.length == 0) {
+      const idx = Math.floor(Math.random() * pool.length);
+      selected.push(pool[idx]);
+  }
+
+  if(selected[0] == null){
+    return null;
+  }
+
   charData = selected[0];
   isRangedChampion = false;
-  //レンジドチャンピオンであるかの判定
-  if(selected.length > 0 && selected[0].isRanged){
+
+  if (selected.length > 0 && selected[0].isRanged) {
     isRangedChampion = true;
   }
 
@@ -2467,6 +2489,9 @@ function rouletteKeyStone() {
   return selected;
 }
 function rouletteSubRune(){
+  if (isRuneRoulette && !isRuneRoulette.checked) {
+    return;
+  }
   const pool = [...currentRunes];
   const subSelected = [];
   const subRune = pool.filter(r => !r.isKeystone && !r.isShards);
@@ -2515,6 +2540,9 @@ function rouletteSubRune(){
   return subSelected;
 }
 function rouletteRuneShard(){
+  if (isRuneRoulette && !isRuneRoulette.checked) {
+    return;
+  }
   const pool = [...currentRunes];
   const shardSelected = [];
   const Shard = pool.filter(r => r.isShards);
@@ -2743,7 +2771,7 @@ function rouletteBuild() {
   }
 
   //レンジドチャンピオンであるかの判定
-  if(isRangedChampion){
+  if(!isRangedChampion){
     pool = pool.filter(i => !i.isRangedOnly);
   }
 
@@ -2930,10 +2958,6 @@ function createRow(cards) {
   const div = document.createElement('div');
   div.style.display = 'flex';
   div.style.justifyContent = 'center';
-  
-  if(isMayhemMode.checked){
-    div.style.marginLeft = '30px';
-  }
   div.style.gap = '10px';
   cards.forEach(it => {
     const card = document.createElement('div');
