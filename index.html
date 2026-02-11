@@ -188,7 +188,7 @@ button.secondary {
   /*background:#99d80f;*/
   margin-top:18px;
   display:flex; 
-  width: 140px;
+  width: 160px;
   margin-left: auto;
   gap:8px 0;
   flex-wrap:wrap;
@@ -388,7 +388,7 @@ button.secondary {
 .startItem-card,
 .item-card {
   border-radius:10px;
-  border:5px solid rgb(0, 65, 67);
+  border:5px solid rgb(0, 21, 22);
   width:100px;
   height:100px;
   justify-content:flex-start;
@@ -427,6 +427,28 @@ button.secondary {
   object-fit:cover;
   background:#09122400;
 }
+
+/* 例: CSS（ページのスタイルシートに追加） */
+.hover-popup {
+  background: rgba(18,18,18,0.92);
+  color: #fff;
+  padding: 10px;
+  gap: 30px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  min-width: 180px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .12s ease, transform .12s ease;
+  will-change: left, top, opacity, transform;
+}
+.hover-popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hover-popup img { width:64px; height:64px; object-fit:cover; border-radius:6px; display:block; margin-bottom:8px; }
+.hover-popup .title { width:480px; font-weight:700; margin-bottom:6px;  white-space: pre-wrap; word-break: break-word;}
+.hover-popup .meta { font-size:13px; opacity:0.9; white-space: pre-wrap; word-break: break-word;}
 
 /* =========================
    アイテムボーダー
@@ -483,7 +505,6 @@ footer {
   color:#9fb6e6;
   opacity:0.95;
 }
-
 /* =========================
    フッター
 ========================= */
@@ -580,7 +601,7 @@ footer {
     flex-direction: row;
     justify-content:center;
     flex-wrap:wrap;
-    width: 400px;
+    width: 420px;
     height: 850px;
   }
   .campion_Role {
@@ -657,7 +678,7 @@ footer {
   .role{
     margin-top:18px;
     display:flex; 
-    width: 140px;
+    width: 120px;
     margin-left: auto;
     gap:8px 0;
     flex-wrap:wrap;
@@ -687,7 +708,7 @@ footer {
   .character{
     margin-top:18px;
     display:flex; 
-    width: 140px;
+    width: 200px;
     flex-direction:column;
     margin-right: auto;
     gap:8px 0;
@@ -849,14 +870,15 @@ footer {
     gap:3px 0;
     flex-wrap:wrap;
     justify-content:center;
-    width: 100%;
+    align-items: center;
+    width: 120%;
   }
   .startItem-card,
   .item-card {
     border-radius:10px;
     border:5px solid rgba(1, 113, 117, 0.163);
-    width:60px;
-    height:60px;
+    width:50px;
+    height:50px;
     justify-content:flex-start;
     overflow:hidden;
     text-align:center;
@@ -985,7 +1007,7 @@ footer {
         <label class="checkbox"><input id="isItemRoulette" type="checkbox" checked> アイテム</label>
         <label class="checkbox"><input id="isLuckyItemToPool" type="checkbox" checked> ラッキーアイテム</label>
         <label class="checkbox"><input id="isAddNoSynergyItem" type="checkbox" checked> シナジーアイテムのみ</label>
-        <label class="checkbox"><input id="isMayhemMode" type="checkbox"> メイヘムモード</label>
+        <label class="checkbox"><input id="isMayhemMode" type="checkbox"> ハウリングアビスモード</label>
       </div>
     </div>
   </div>
@@ -1454,6 +1476,7 @@ const CHARACTERS = [
     ...BASE_STATUS.AP_TANK,
     img: "img/Champion/Sejuani.png" },
   { name: "セナ", isRanged:true, hasSlow:true, hasHardCC:true, canEnchantAllies: true,
+    prefStats: ["AD", "AP", "AS", "AH", "HP", "Mana", "Crit", "LS", "On-hit", "Lethality", "ArmorPen", "H/S_Power", "MS"],
     excludeStats: ["MagicLethality", "MagicPen"],
     img: "img/Champion/Senna.png" },
   { name: "セラフィーン", isRanged:true, hasSlow:true, hasHardCC:true, canEnchantAllies: true,
@@ -1656,406 +1679,554 @@ const CHARACTERS = [
 
 /* --- アイテムリスト --- */
 const ITEMS = [
-  // --- ブーツ ---
+  // --- ブーツ --- 
   { name:"バーサーカー ブーツ", isBoot:true,
    stats: ["AS", "MS"],
+   info: "\n+25% Attack Speed +45 Movement Speed",
    img: "img/Items/Boots/Berserker_Boots.png"},
   { name:"アイオニア ブーツ", isBoot:true,
    stats: ["AH", "MS"],
+   info: "\n+10 Ability Haste +45 Movement Speed\nアイオニアン・インサイト: +10 Summoner Spell Haste",
    img: "img/Items/Boots/Ionian_Boots.png"},
   { name:"スイフトネス ブーツ", isBoot:true,
    stats: ["MS"],
+   info: "\n+55 Movement Speed\n俊足: Slowの効果が25%低下する",
    img: "img/Items/Boots/Swiftness_Boots.png"},
   { name:"マーキュリー ブーツ", isBoot:true,
    stats: ["MR", "MS"],
+   info: "\n+45 Movement Speed +20 Magic Resist +30% Tenacity",
    img: "img/Items/Boots/Mercury_Boots.png"},
   { name:"ソーサラー シューズ", isBoot:true,
    stats: ["MagicLethality", "MS"],
+   info: "\n+45 Movement Speed +12 Magic Penetration",
    img: "img/Items/Boots/Sorcerer_Boots.png"},
   { name:"プレート スチールキャップ", isBoot:true,
    stats: ["AR", "MS"],
+   info: "\n+45 Movement Speed +25 Armor\nプレート: 通常攻撃で受けるダメージを10%軽減する",
    img: "img/Items/Boots/Plate_Steel_Boots.png"},
   
   // --- スタートアイテム ---
   { name:"ドランブレード", isStartitem:true,
    stats: ["AD", "HP", "Omnivamp"],
+   info: "\n+10 Attack Damage +80 Health +2.5% Omni Vamp",
    img: "img/Items/Starting_Items/Doran's_Blade.png"},
   { name:"ドランシールド", isStartitem:true,
    stats: ["HP"],
+   info: "\n+110 Health\n一点集中: 5秒毎に体力を4回復する。チャンピオンからダメージを受けると、8秒かけて体力を回復する。\n手助け: ミニオンへの通常攻撃に5の追加物理ダメージを付与する",
    img: "img/Items/Starting_Items/Doran's_Shield.png"},
   { name:"ドランリング", isStartitem:true,
     stats: ["AP", "HP"],
+   info: "\n+18 Ability Power +90 Health\nドレイン: 毎秒1マナを回復する。敵チャンピオンにダメージを与えると、5秒間、回復量が2マナに増加する。マナを獲得できない場合は、代わりにその値の45%にあたる体力を回復する\n手助け: ミニオンへの通常攻撃に5の追加物理ダメージを付与する",
    img: "img/Items/Starting_Items/Doran's_Ring.png"},
   { name:"カル", isStartitem:true,
     stats: ["AD"],
+   info: "\n+7 Attack Damage\n収穫者: 3の体力通常攻撃時効果を回復する。ミニオンをキルすると1ゴールドを獲得する(最大100)。最大まで獲得するとさらに350ゴールドを獲得する",
    img: "img/Items/Starting_Items/Cull.png"},
   { name:"スコーチクロウの幼体", isStartitem:true, isJungle:true,
+   info: "\n",
    img: "img/Items/Starting_Items/Scorchclaw.png"},
   { name:"ガストウォーカーの幼体", isStartitem:true, isJungle:true,
+   info: "\n",
    img: "img/Items/Starting_Items/Gustwalker.png"},
   { name:"モスストンパーの幼体", isStartitem:true, isJungle:true,
+   info: "\n",
    img: "img/Items/Starting_Items/Mosstomper.png"},
   { name:"ワールドアトラス", isStartitem:true, isSupport:true,
+   info: "\n",
    img: "img/Items/Starting_Items/World_Atlas_item.png"},
   
   // --- サポート ---
   //{ name:"世界の恵み", isSupport:true, img:"img/Items/Support_Items/世界の恵み.png"},
   { name:"ブラッドソング", isSupport:true,
+   info: "\n",
    img:"img/Items/Support_Items/Bloodsong.png"},
   { name:"セレスティアル オポジション", isSupport:true,
+   info: "\n",
    img:"img/Items/Support_Items/Celestial_Opposition.png"},
   { name:"ドリーム メーカー", isSupport:true,
+   info: "\n",
    img:"img/Items/Support_Items/Dream_Maker.png"},
   { name:"至点のソリ", isSupport:true,
+   info: "\n",
    img:"img/Items/Support_Items/Solstice_Sleigh.png"},
-  { name:"ザズ＝ザクのレルムスパイク", isSupport:true, 
+  { name:"ザズ＝ザクのレルムスパイク", isSupport:true,
+   info: "\n",
    img:"img/Items/Support_Items/Zaz'Zak's_Realmspike.png"},
 
   // --- 通常 ---
   { name:"アビサル マスク", 
    stats: ["HP", "MR", "AH"],
+   info: "\n+350 Health +45 Magic Resist +15 Ability Haste\n荒廃: 周囲の敵チャンピオンが受ける魔法ダメージが12%増加する",
    img:"img/Items/Abyssal_Mask.png"},
   { name:"アクチュアライザー",
    stats: ["AP", "Mana", "AH"],
+   info: "\n+90 Ability Power +300 Mana +10 Ability Haste\n本気のマナ(60s): 8秒間、自身のマナが強化される。強化中は、スキルのマナコストが100%増加し、スキルダメージ、シールド量、体力回復量、が[15% + (0.005%増加マナ)%]増加し、通常スキルのCDの進行が30%加速する",
    img:"img/Items/Actualizer.png"},
   { name:"アークエンジェル スタッフ", isLifeline:true,
    stats: ["AP", "Mana", "AH"],
+   info: "\n+70 Ability Power +600 Mana +25 Ability Haste\n畏怖:増加マナの1%にあたる魔力を獲得する。\nマナフロー(8s、最大5チャージ):スキルが対象に命中すると1チャージ消費してマナが5(相手がチャンピオンの場合は2倍)増加する。最大マナが360になると「セラフ エンブレイス」に変化する。",
    img:"img/Items/Archangel's_Staff.png"},
   { name:"アーデント センサー", isEnchantItem:true,
    stats: ["AP", "H/S_Power", "ManaRegen", "MS"],
+   info: "\n+45 Ability Power +125% Base Mana Regen +10% Heal and Shield Power +4% Movement Speed\nサンクティファイ: 味方チャンピオンに体力回復効果またはシールドを付与すると、6秒間、自身とその味方の両方が強化され、攻撃速度が25%増加して、20の魔法ダメージ通常攻撃時効果を与える",
    img:"img/Items/Ardent_Censer.png"},
   { name:"アクシオム アーク",
    stats: ["AD", "Lethality", "AH"],
+   info: "\n+55 Attack Damage +18 Lethality +20 Ability Haste\n流転: ダメージを与えてから3秒以内にそのチャンピオンが倒されると、アルティメットスキルの最大クールダウンの[15% + (15% 脅威)%]が解消される。",
    img:"img/Items/Axiom_Arc.png"},
   { name:"バンドルパイプ", needsCC:true,
    stats: ["HP", "AH", "AR", "MR"],
+   info: "\n+200 Health +15 Ability Haste +20 Armor +20 Magic Resist\nファンファーレ: 敵チャンピオンにスロウ効果または移動不能効果を付与すると、8⚔/4(Ranged)秒間「ファンファーレ」を獲得する。「ファンファーレ」は移動速度を20増加させる。「ファンファーレ」を獲得中は、自身を含む周囲の味方の攻撃速度が30%⚔/20%(Ranged)増加する。",
    img:"img/Items/Bandlepipes.png"},
   { name:"バンシー ヴェール", isSpellSheild:true,
    stats: ["AP", "MR"],
+   info: "\n+105 Ability Power +40 Magic Resist\n破棄(40s): 次に受ける敵のスキルをブロックするスペルシールドを獲得する。",
    img:"img/Items/Banshee's_Veil.png"},
   { name:"バスティオンブレイカー", isSummonersRiftOnly:true,
    stats: ["AD", "Lethality", "AH"],
+   info: "\n+55 Attack Damage +15 Ability Haste +22 Lethality\nシェイプドチャージ(20s): チャンピオンまたはエピックモンスターにスキルダメージを与えると、追加で[30⚔/15(Ranged) + (150⚔/75(Ranged)%脅威)]の確定ダメージを与える。\nサボタージュ: 敵チャンピオンにダメージを与えてから3秒以内にその対象からキルまたはアシストを奪うと、90秒間「サボタージュ」を獲得する。「サボタージュ」を獲得している間は、エピックモンスターまたはタワーに次に通常攻撃を行った際に3秒かけて追加で[300⚔/240(Ranged) + (2500⚔/2000(Ranged)%Lethality)]の確定ダメージを与える。",
    img:"img/Items/Bastionbreaker.png"},
   { name:"ブラック クリーバー", isArmorPenetration:true, 
    stats: ["AD", "HP", "AH", "ArmorPen"],
+   info: "\n+40 Attack Damage +400 Health +20 Ability Haste\nカーブ: チャンピオンに物理ダメージを与えると、6秒間、対象の物理防御を6%低下させる(最大5回スタック)。\n熱情: 物理ダメージを与えると、2秒間移動速度が20増加する。",
    img:"img/Items/Black_Cleaver.png"},
   { name:"黒炎のトーチ",
    stats: ["AP", "Mana", "AH"],
+   info: "\n+80 Ability Power +600 Mana +20 Ability Haste\n悪意の炎: ダメージスキルが3秒間毎秒[20 + (2%魔力)]の追加魔法ダメージを与える。\n黒炎:「悪意の炎」の影響を受けた敵チャンピオン、エピックモンスター、大型モンスター1体ごとに、魔力が4%増加する。",
    img:"img/Items/Blackfire_Torch.png"},
   { name:"ルインドキング ブレード", 
    stats: ["AD", "AS", "LS", "On-hit"],
+   info: "\n+40 Attack Damage +25% Attack Speed +10% Life Steal\nミストエッジ: 通常攻撃が敵の現在体力の9%⚔/6%(Ranged)にあたる物理ダメージ通常攻撃時効果を追加で与える。\n引き裂く影(15s): 敵チャンピオンに3回通常攻撃を行うと、対象に1秒間、30%のスロウ効果を与える。",
    img:"img/Items/Blade_Of_The_Ruined_King.png"}, 
   { name:"ブラッドレターの呪い", isMagicPenetration:true,
    stats: ["AP", "HP", "AH", "MagicPen"],
+   info: "\n+65 Ability Power +400 Health +15 Ability Haste\n邪悪な腐敗: スキルや自動効果でチャンピオンに魔法ダメージを与えると、6秒間、対象の魔法防御を7.5%低下させる。(最大30%)",
    img:"img/Items/Bloodletter's_Curse.png"},
   { name:"ブラッドサースター",
    stats: ["AD", "LS"],
+   info: "\n+80 Attack Damage +15% Life Steal\nイコルシールド: ライフスティールで得た余剰の体力が最大(165-315)までシールドに変換される。",
    img:"img/Items/Bloodthirster.png"},
   { name:"ケミパンク チェーンソード", 
    stats: ["AD", "HP", "AH"],
+   info: "\n+45 Attack Damage +450 Health +15 Ability Haste\n両断: 敵チャンピオンに物理ダメージを与えると、3秒間40%の「負傷」を付与する。",
    img:"img/Items/Chempunk_Chainsword.png"},
   { name:"コズミック ドライブ",
    stats: ["AP", "HP", "AH", "MS"],
+   info: "\n+350 Health +70 Ability Power +25 Ability Haste +4% Movement Speed\nスペルダンス: チャンピオンに魔法ダメージか確定ダメージを与えると、4秒間、移動速度が20増加する。",
    img:"img/Items/Cosmic_Drive.png"},
   { name:"クリプトブルーム", isMagicPenetration:true,
    stats: ["AP", "MagicPen", "AH"],
+   info: "\n+75 Ability Power +20 Ability Haste +30% Magic Penetration\n死から命へ(60s): 自身がダメージを与えたチャンピオンが3秒以内に倒されると、その残骸から新星が発生する。この新星は[100 + (20%魔力)]の体力を回復する。",
    img:"img/Items/Cryptbloom.png"},
   { name:"ドーンコア",
    stats: ["AP", "H/S_Power", "ManaRegen"],
+   info: "\n+45 Ability Power +16% Heal and Shield Power +100% Base Mana Regen\nファーストライト: 基本マナ自動回復100%ごとに体力回復量とシールド量が2%増加し、魔力が10増加する",
    img:"img/Items/Dawncore.png"},
   { name:"デッド マン プレート", isDeadman:true,
    stats: ["HP", "AR", "MS"],
+   info: "\n+350 Health +55 Armor +4% Movement Speed\nシップレッカー: 移動中に最大で20の増加移動速度を獲得する。次の通常攻撃が増加した移動速度のエネルギーを放出して最大[(100%基本攻撃力) + 40]%の追加物理ダメージを与える。\n不沈: スロウ効果が15%減少させる。",
    img:"img/Items/Dead_Man's_Plate.png"},
   { name:"デス ダンス", 
    stats: ["AD", "AR", "AH"],
+   info: "\n+60 Attack Damage +50 Armor +15 Ability Haste\n強行突破: 受けたダメージの30%⚔/10%(Ranged)を3秒かけて受けるようになる。\n拒絶:自分がダメージを与えてから3秒以内にチャンピオンが倒されると「強行突破」の残りのダメージが除去され、増加攻撃力の75%にあたる体力を回復する。",
    img:"img/Items/Deaths_Dance.png"},
   { name:"黄昏と暁", isSheen:true,
    stats: ["HP", "AP", "AH", "AS", "On-hit"],
+   info: "\n+70 Ability Power +350 Health +20 Ability Haste +25% Attack Speed\n追撃(1.5s): スキル使用後、次の通常攻撃でに[(75%基本攻撃力) + (10%魔力)]の追加魔法ダメージ通常攻撃時効果を与え、1回追加で通常攻撃時効果を適用する。",
    img:"img/Items/Dusk_And_Dawn.png"},
   { name:"ヘリアの残響", isEnchantItem:true,
    stats: ["AP", "HP", "AH", "ManaRegen"],
+   info: "\n+35 Ability Power +200 Health +20 Ability Haste +125% Base Mana Regen\nソウルサイフォン: 敵チャンピオンに対する軽減前の与ダメージの35%をソウルチャージとして獲得する(最大[80-250]チャージ)。味方に体力回復効果またはシールドを付与すると、ソウルチャージをすべて消費して、その値の100%にあたる体力を回復する",
    img:"img/Items/Echoes_Of_Helia.png"},
   { name:"赤月の刃", 
    stats: ["AD", "AH"],
+   info: "\n+60 Attack Damage +15 Ability Haste\n沈まぬ月(6s): 2秒以内に2つの異なる通常攻撃またはスキルをチャンピオンに命中させると、対象の最大体力の6%⚔/4%(Ranged)の物理ダメージを与え、自身は2秒間、耐久値[160 + (40%増加AD)⚔/80 + (20%増加AD)(Ranged)]シールドを得る。",
    img:"img/Items/Eclipse.png"},
   { name:"ナイト エッジ", isSpellSheild:true,
    stats: ["AD", "Lethality", "HP",],
+   info: "\n+50 Attack Damage +250 Health +15 Lethality\n破棄(40s): 次に敵から受ける敵のスキルをブロックするスペルシールドを獲得する。",
    img:"img/Items/Edge_of_Night.png"},
   { name:"終わりなき飢え", 
    stats: ["AD", "Omnivamp", "Tenacity", "AH"],
+   info: "\n+65 Attack Damage +5% Omni Vamp +20% Tenacity\n大飢饉: スキルヘイストが[5 + (10%増加攻撃力)]増加する。\n宴: 直前の3秒以内にダメージを与えていたチャンピオンが倒されると、8秒間、オムニヴァンプが15%増加する。",
    img:"img/Items/Endless_Hunger.png"},
   { name:"エッセンス リーバー", isSheen:true,
    stats: ["AD", "AH", "Crit", "On-hit"],
+   info: "\n+50 Attack Damage +25% Critical Chance +20 Ability Haste\n追撃(1.5s): スキル使用後、次の通常攻撃で[(125%基本AD) + (50%Crit率)]の追加物理ダメージを与え、マナを[(62.5%基本AD) + (25%Crit率)]回復する。通常攻撃時効果",
    img:"img/Items/Essence_Reaver.png"},
   { name:"実験的ヘクスプレート", 
    stats: ["AD", "AS", "HP"],
+   info: "\n+40 Attack Damage +20% Attack Speed +450 Health\nヘクスチャージ: アルティメットスキルヘイストが30増加する。\nオーバードライブ(30s): アルティメットスキルを発動から8秒間、攻撃速度が50%、移動速度が20%増加する。",
    img:"img/Items/Experimental_Hexplate.png"},
   { name:"フィーンドハンターの矢",
     stats: ["AS", "Crit", "MS"],
+   info: "\n+45% Attack Speed +25% Critical Chance +4% Movement Speed\n夜警: アルティメットスキルヘイストが30増加する。\n連射(45s): アルティメットスキル使用後、8秒以内に行う次の3回の通常攻撃の攻撃速度が50%増加し、通常のクリティカルダメージの80%にあたるクリティカルダメージを与える。通常攻撃が元々クリティカルになる場合、通常のクリティカルダメージを与えて、さらに15%の追加確定ダメージを与える。",
    img:"img/Items/Fiendhunter_Bolts.png"},
   { name:"自然の力",
    stats: ["HP", "MR", "MS"],
+   info: "\n+400 Health +55 Magic Resist +4% Movement Speed\n毅然: チャンピオンからの魔法ダメージ8回受けると、魔法防御が70、移動速度が6%上昇する。",
    img:"img/Items/Force_of_Nature.png"},
   { name:"フローズン ハート",
    stats: ["AR", "Mana", "AH"],
+   info: "\n+75 Armor +400 Mana +20 Ability Haste\n冬の抱擁:周囲のチャンピオンの攻撃速度を20%低下させる。",
    img:"img/Items/Frozen_Heart.png"},
   { name:"ガーディアン エンジェル", isSummonersRiftOnly:true,
    stats: ["AD", "AR"],
+   info: "\n+45 Attack Damage +55 Armor\n救済(300s): HPが0になった際に4秒間、固有時停止状態となる。その後、基本体力の50%と最大マナの100%を回復する。",
    img:"img/Items/Guardian_Angel.png"},
   { name:"グインソー レイジブレード",
    stats:["AD", "AP", "AS", "On-hit"],
+   info: "\n+30 Attack Damage +30 Ability Power +25% Attack Speed\n激憤: 通常攻撃が30の追加魔法ダメージ通常攻撃時効果を与える。\nシージングストライク: 通常攻撃を行うと3秒間、攻撃速度を8%獲得する(最大4回スタック)。スタックが最大の間はになる、通常攻撃3回ごとに通常攻撃時効果を2回適応する。",
    img:"img/Items/Guinsoo's_Rageblade.png"},
   { name:"心の鋼",
    stats: ["HP", "HPRegen"],
+   info: "\n+900 Health +100% Base Health Regen\n巨人の食欲(敵チャンピオン毎に30s): 3秒間、敵チャンピオンの近くにいると、その対象に行う次の通常攻撃は[70 + (最大体力の6%)]の追加物理ダメージを与え、自身は最大体力がそのダメージの8%増加する。\nゴライアス: 最大体力1000ごとに、サイズが3%増加する(最大30%)。",
    img:"img/Items/Heartsteel.png"},
   { name:"ヘクスオプティックC44",
    stats: ["AD", "Crit"],
+   info: "\n+55 Attack Damage +25% Critical Chance\nズーム: 敵との距離に応じて、通常攻撃が与えるダメージが最大10%増加する(射程600で最大ダメージ)。\nアーケインエイム: 直前の3秒以内にダメージを与えていた敵チャンピオンが倒されると、6秒間、射程が100増加する。",
    img:"img/Items/Hexoptics_C44.png"},
   { name:"ヘクステック ガンブレード",
    stats: ["AD", "AP", "Omnivamp"],
+   info: "\n+40 Attack Damage +80 Ability Power +10% Omni Vamp\nライトニングボルト(60s): 対象の敵チャンピオンに[175-253 + (30%魔力)]の魔法ダメージを与え、1.5秒25%のスロウ効果を付与する。",
    img:"img/Items/Hextech_Gunblade.png"},
   { name:"ヘクステック ロケットベルト",
    stats: ["AP", "HP", "AH"],
+   info: "\n+300 Health +70 Ability Power +20 Ability Haste\n超音速(40s): 指定方向にダッシュして複数の魔弾を放ち、[100 + (10%魔力)]の魔法ダメージを与える。",
    img:"img/Items/Hextech_Rocketbelt.png"},
   { name:"ホロウ レディアンス", isBamicinder:true,
    stats: ["HP", "MR", "AH", "HPRegen"],
+   info: "\n+400 Health +40 Magic Resist +100% Base Health Regen +10 Ability Haste\n猛火: ダメージを受けるか与えると、3秒間、周囲の敵に毎秒[15 + (1%増加体力)]の魔法ダメージを与える。\n荒涼: 敵をキルすると、その周囲に[30 + (2%増加体力)]の魔法ダメージを与える。",
    img:"img/Items/Hollow_Radiance.png"},
   { name:"ホライゾン フォーカス",
    stats: ["AP", "AH"],
+   info: "\n+75 Ability Power +25 Ability Haste\nハイパーショット: 射程600以上で敵チャンピオンにスキルダメージを与えると、そのチャンピオンを6秒間可視化する。ハイパーショットで可視化した敵に与えるダメージは10%増加する。\nフォーカス(30s): 「ハイパーショット」を発動させると、対象から1400ユニット以内にいるほかのすべての敵チャンピオンを3秒間可視化する。",
    img:"img/Items/Horizon_Focus.png"},
   { name:"ヒュブリス",
    stats: ["AD", "Lethality", "AH"],
+   info: "\n+60 Attack Damage +18 Lethality +10 Ability Haste\nエミネンス: 直前の3秒以内ダメージを与えていたチャンピオンが倒されると、90秒間攻撃力が[15 + キルしたチャンピオンごとに2]増加する。",
    img:"img/Items/Hubris.png"},
   { name:"ハルブレイカー", 
    stats: ["AD", "HP", "MS", "On-hit"],
+   info: "\n+40 Attack Damage +500 Health +4% Movement Speed\n艦長: チャンピオンまたはエピックモンスターに対する通常攻撃5回ごとに[(120%基本攻撃力) + (5%最大体力)⚔/(84%基本攻撃力) + (3.5%最大体力)(Ranged)]の追加物理ダメージを与える。対象が建造物の場合はこのダメージが[(300%基本攻撃力) + (10%最大体力)⚔/(210%基本攻撃力) + (7%最大体力)(Ranged)]に増加する\n乗船部隊: 周囲の味方の砲撃ミニオンおよびスパーミニオンの物理防御と魔法防御が[70-130⚔/35-65(Ranged)]増加する。",
    img:"img/Items/Hullbreaker.png"},
   { name:"アイスボーン ガントレット", isSheen:true,
    stats: ["HP", "AR", "AH", "On-hit"],
+   info: "\n+300 Health +50 Armor +15 Ability Haste\n追撃(1.5s): スキル使用後、次の通常攻撃が(150%基本攻撃力)の追加物理ダメージ通常攻撃時効果を与え、2秒間、25%⚔/12.5%(Ranged)のスロウ効果を与える凍てつくゾーンを発生させる。",
    img:"img/Items/Iceborn_Gauntlet.png"},
   { name:"イモータル シールドボウ", isLifeline:true,
    stats: ["AD", "Crit"],
+   info: "\n+55 Attack Damage +25% Critical Chance\nライフライン(90s): ダメージを受け、そのダメージにより体力が最大値の30%未満になる場合、3秒間耐久値(400-700⚔/320-560(Ranged))のシールドを得る。",
    img:"img/Items/Immortal_Shieldbow.png"},
   { name:"帝国の指令", needsCC:true,
    stats: ["AP", "AH", "ManaRegen"],
+   info: "\n+55 Ability Power +200 Health +20 Ability Haste +100% Base Mana Regen\n調整射撃(対象ごとに9s): 敵チャンピオンにスロウ効果もしくは移動不能効果を与えた際、対象を5秒間マークする。味方チャンピオンがダメージを与えるとマークが爆発し、現在体力の10%にあたる魔法ダメージを与える。",
    img:"img/Items/Imperial_Mandate.png"},
   { name:"インフィニティ エッジ",
    stats: ["AD", "Crit"],
+   info: "\n+75 Attack Damage +25% Critical Chance +30% Critical Damage",
    img:"img/Items/Infinity_Edge.png"},
   { name:"変幻自在のジャック＝ショー",
    stats: ["HP", "AR", "MR"],
+   info: "\n+350 Health +45 Armor +45 Magic Resist\n強靭なるヴォイドの子ら: チャンピオンとの戦闘を開始してから5秒後に、戦闘終了まで物理防御と魔法防御が30%増加する。",
    img:"img/Items/Jak'Sho_The_Protean.png"},
   { name:"ケイニック ルーケルン",
    stats: ["HP", "MR", "HPRegen"],
+   info: "\n+400 Health +80 Magic Resist +100% Base Health Regen\nメイジベイン: 15秒間魔法ダメージを受けずにいると、(15%最大体力)の魔法ダメージを防ぐシールドを獲得する。",
    img:"img/Items/Kaenic_Rookern.png"},
   { name:"騎士の誓い",
    stats: ["HP", "AR", "AH", "HPRegen"],
+   info: "\n+200 Health +100% Base Health Regen +40 Armor +10 Ability Haste\n犠牲: 味方の同志が近くにいる間は、その味方が受けるダメージの12%を代わりに受け、また同志がチャンピオンに与えたダメージの10%にあたる体力を回復する。\n誓約(60s): 味方を同志に指定する。",
    img:"img/Items/Knight's_Vow.png"},
   { name:"クラーケン スレイヤー",
    stats: ["AD", "AS", "MS", "On-hit"],
+   info: "\n+45 Attack Damage +40% Attack Speed +4% Movement Speed\n打倒: 通常攻撃が3回ごとに、(150~200⚔/120~160(Ranged))の追加物理ダメージ通常攻撃時効果を与える。このダメージはの減少体力に応じて最大(263-350)まで増加する。",
    img:"img/Items/Kraken_Slayer.png"},
   { name:"ライアンドリーの仮面",
    stats: ["AP", "HP"],
+   info: "\n+300 Health +60 Ability Power\n苦悶 :ダメージスキルが敵を燃やし、3秒間、最大体力の2%の魔法ダメージを毎秒与える。\n重苦: 敵チャンピオンと戦闘状態の間、与えるダメージが毎秒2%(最大6%)増加する。",
    img:"img/Items/Liandry's_Torment.png"},
   { name:"リッチ ベイン", isSheen:true, //On-hitと相性が良くないキャラに抽選させるためにあえてOn-hitを抜く
    stats: ["AP", "AH", "MS"], //"On-hit"
+   info: "\n+100 Ability Power +10 Ability Haste +4% Movement Speed\n追撃(1.5s): スキル使用後、10秒以内の次の通常攻撃の攻撃速度が50%増加し、[(75%基本攻撃力) + (40%魔力)]の追加魔法ダメージ通常攻撃時効果を与える。",
    img:"img/Items/Lich_Bane.png"},
   { name:"ソラリのロケット",
    stats: ["HP", "AR", "MR", "AH"],
+   info: "\n+200 Health +25 Armor +25 Magic Resist +10 Ability Haste\n献身(90s): 周囲の味方に耐久値(200-360)のシールドを付与する。シールドは2.5秒かけて減衰する。",
    img:"img/Items/Locket_Of_The_Iron_Solari.png"},
   { name:"ドミニク リガード", isArmorPenetration:true,
    stats: ["AD", "Crit", "ArmorPen"],
+   info: "\n+35 Attack Damage +25% Critical Chance +35% Armor Penetration\nジャイアント スレイヤー: 対象チャンピオンの増加体力に応じて、最大15%の追加ダメージを与える。このダメージは増加体力が1500のときに最大になる。",
    img:"img/Items/Lord_Dominik's_Regards.png"},
   { name:"ルーデン エコー",
    stats: ["AP", "Mana", "AH"],
+   info: "\n+100 Ability Power +600 Mana +10 Ability Haste\nエコー(12s): ダメージスキルが6発のエコーを放ち、対象と周囲の敵[75 + (5%魔力)]の追加魔法ダメージを与える。残りのエコーはメインの対象に向かって放ち、20%のダメージを与える(最大:(150 + (10%魔力)ダメージ)。",
    img:"img/Items/Luden's_Tempest.png"},
   { name:"マリグナンス",
    stats: ["AP", "Mana", "AH"],
+   info: "\n+90 Ability Power +600 Mana +15 Ability Haste\n嘲り: アルティメットスキルヘイストが20増加する。\n憎悪の霧: アルティメットスキルでチャンピオンにダメージを与えると、対象の足元の地面が燃え上がり、3秒間、毎秒[60 + (5%魔力)]の魔法ダメージを与えて、対象の魔法防御を10低下させる。",
    img:"img/Items/Malignance.png"},
   { name:"マナムネ",
    stats: ["AD", "Mana", "AH"],
+   info: "\n+35 Attack Damage +500 Mana +15 Ability Haste\n畏怖: 追加で(2%増加マナ)の攻撃力を獲得する。\nマナフロー(8s、最大4チャージ): 通常攻撃とスキルが命中すると最大マナが3(相手がチャンピオンの場合は2倍)増加する。最大マナが360になると「ムラマナ」に変化する。",
    img:"img/Items/Manamune.png"},
   { name:"マルモティウスの胃袋", isLifeline:true,
    stats: ["AD", "MR", "AH", "Omnivamp"],
+   info: "\n+60 Attack Damage +40 Magic Resist +15 Ability Haste\nライフライン(90s): 魔法ダメージを受け、そのダメージにより体力が最大値の30%未満になる場合、3秒間[200(⚔)/150(Ranged) + 150%増加攻撃力(⚔)/112.5%増加攻撃力(Ranged)]の魔法ダメージを防ぐシールドを得て、戦闘終了までオムニヴァンプが10%増加する。",
    img:"img/Items/Maw_Of_Malmortius.png"},
   { name:"メジャイ ソウルスティーラー", isSummonersRiftOnly:true,
    stats: ["HP", "AP", "MS"],
+   info: "\n+20 Ability Power +100 Health\n栄光: キルまたはアシストを獲得すると、「栄光」を最大25スタックまで獲得する。倒されると「栄光」を10失う。「栄光」のスタックごとに魔力が5増加し、「栄光」が10以上になると移動速度が10%増加する。",
    img:"img/Items/Mejai's_Soulstealer.png"},
   { name:"マーキュリアル シミター",
    stats: ["AD", "MR", "LS"],
+   info: "\n+50 Attack Damage +35 Magic Resist +10% Life Steal\n水銀(90s): 発動ですべての行動妨害系デバフ(ノックアップを除く)を除去し、2秒間移動速度が50%増加する。",
    img:"img/Items/Mercurial_Scimitar.png"},
   { name:"ミカエルの祝福",
    stats: ["HP", "ManaRegen", "H/S_Power", "AH"],
+   info: "\n+250 Health +12% Heal and Shield Power +100% Base Mana Regen +15 Ability Haste\n浄化(120s): 味方チャンピオンからノックアップとサプレッション以外のすべての行動妨害系デバフを除去し、体力を(100-250)回復させる。",
    img:"img/Items/Mikael's_Blessing.png"},
   { name:"ムーンストーンの再生", isEnchantItem:true,
    stats: ["AP", "HP", "AH", "ManaRegen"],
+   info: "\n+25 Ability Power +200 Health +20 Ability Haste +125% Base Mana Regen\n星明りの恩寵: 味方への体力回復またはシールド効果が、別の味方1体(自身を除く)に連鎖する。連鎖による体力回復量は元の値の30%、シールド耐久値は元の値の35%となる。",
    img:"img/Items/Moonstone_Renewer.png"},
   { name:"モレロノミコン",
    stats: ["AP", "HP", "AH"],
+   info: "\n+350 Health +75 Ability Power +15 Ability Haste\n重傷: 敵チャンピオンに魔法ダメージを与えると、3秒間40%の「負傷」を付与する。",
    img:"img/Items/Morellonomicon.png"},
   { name:"モータル リマインダー", isArmorPenetration:true,
    stats: ["AD", "Crit", "ArmorPen"],
+   info: "\n+35 Attack Damage +25% Critical Chance +30% Armor Penetration\n重症: 敵チャンピオンに物理ダメージを与えると、3秒間40%の「負傷」を付与する。",
    img:"img/Items/Mortal_Reminder.png"},
   { name:"ナッシャー トゥース",
    stats: ["AP", "AS", "AH", "On-hit"],
+   info: "\n+80 Ability Power +50% Attack Speed +15 Ability Haste\nイカシアの牙: 通常攻撃が(15%魔力)の追加魔法ダメージ通常攻撃時効果を与える。",
    img:"img/Items/Nashor's_Tooth.png"},
   { name:"ナヴォリ フリッカーブレード",
    stats: ["AS", "Crit", "MS"],
+   info: "\n+40% Attack Speed +25% Critical Chance +4% Movement Speed\n至上: 通常攻撃でアルティメット以外のスキルの残りクールダウンが15%短縮する。",
    img:"img/Items/Navori_Flickerblade.png"},
   { name:"オポチュニティー",
    stats: ["AD", "Lethality"],
+   info: "\n+55 Attack Damage +18 Lethality\n臨戦態勢: チャンピオンとの日戦闘状態が8秒間続くと、脅威が11(⚔)/5(Ranged)増加する。この脅威はチャンピオンにダメージを与えてから3秒間持続する。",
    img:"img/Items/Opportunity.png"},
   { name:"覇王のブラッドメイル", 
    stats: ["HP", "AD"],
+   info: "\n+550 Health +30 Attack Damage\n暴君: 増加体力の2.5%を攻撃力として獲得する。\n報復: 減少体力の割合に応じて、攻撃力が最大12%まで増加する。",
    img:"img/Items/Overlord's_Bloodmail.png"},
   { name:"ファントム ダンサー",
    stats: ["AS", "Crit", "MS"],
+   info: "\n+65% Attack Speed +25% Critical Chance +10% Movement Speed\n幽霊のワルツ: ゴースト化する。",
    img:"img/Items/Phantom_Dancer.png"},
   { name:"プロフェイン ハイドラ", isTiamat:true,
    stats: ["AD", "Lethality", "AH"],
+   info: "\n+55 Attack Damage +18 Lethality +10 Ability Haste\nなぎ払い: 通常攻撃が周囲の敵に(40%(⚔)/20%(Ranged))物理ダメージを与える。\n異端の斬撃(10s): 周囲に(80%攻撃力)の物理ダメージを与える。",
    img:"img/Items/Profane_Hydra.png"},
   { name:"プロトプラズム ハーネス", isLifeline:true,
    stats: ["HP", "AH"],
+   info: "\n+600 Health +20 Ability Haste\nライフライン: ダメージを受け、そのダメージにより体力が最大値の30%未満になる場合、5秒間、最大体力を(200-300)獲得し、その効果時間をかけて体力を[(200-400) + (175%増加物理防御) + (175%増加魔法防御)]回復する。体力回復中は、サイズが15%、移動速度が10%、行動妨害耐性が25%増加する。",
    img:"img/Items/Protoplasm_Harness.png"},
   { name:"ラバドン デスキャップ",
    stats: ["AP"],
+   info: "\n+130 Ability Power\nマジカルオーパス: 合計魔力を30%増加させる。",
    img:"img/Items/Rabadon's_Deathcap.png"},
   { name:"ランデュイン オーメン",
    stats: ["HP", "AR"],
+   info: "\n+75 Armor +350 Health\n耐性: 受けるクリティカルダメージが30%軽減される。\n卑下(90s): 周囲の敵に2秒間、70%のスロウ効果を付与する。",
    img:"img/Items/Randuin's_Omen.png"},
   { name:"ラピッド ファイアキャノン",
    stats: ["AS", "Crit", "MS"],
+   info: "\n+35% Attack Speed +25% Critical Chance +4% Movement Speed\n心眼: エネルギー充填状態の通常攻撃が40の追加魔法ダメージを与え、その射程距離が35%増加する。",
    img:"img/Items/Rapid_Firecannon.png"},
   { name:"ラヴァナス ハイドラ", isTiamat:true, 
    stats: ["AD", "AH", "LS"],
+   info: "\n+65 Attack Damage +15 Ability Haste +12% Lifesteal\nなぎ払い: 通常攻撃が周囲の敵に(40%攻撃力(⚔)/20%攻撃力(Ranged))物理ダメージを与える。\n貪欲な三日月(10s): 周囲の敵に(80%攻撃力)の物理ダメージを与える。自身のライフスティールは、このダメージに適用される。",
    img:"img/Items/Ravenous_Hydra.png"},
   { name:"リデンプション",
    stats: ["AP", "AH", "ManaRegen", "H/S_Power"],
+   info: "\n+30 Ability Power +100% Base Mana Regen +15 Ability Haste +10% Heal and Shield Power\n介入(90s): 2.5秒後に味方ユニットの体力を150-350回復し、敵チャンピオンに最大体力の10%の確定ダメージを与える。",
    img:"img/Items/Redemption.png"},
   { name:"リフトメーカー",
    stats: ["AP", "HP", "AH"],
+   info: "\n+70 Ability Power +350 Health +15 Ability Haste\nヴォイドの邪念: 敵チャンピオンとの戦闘中、自身の与えるダメージが毎秒2%増加する(最大8%)。効果が最大になっている間はオムニヴァンプが10%(⚔)/6%(Ranged)増加する。\nヴォイドの浸食: 増加体力の2%にあたる魔力を獲得する。",
    img:"img/Items/Riftmaker.png"},
   { name:"ロッド オブ エイジス",
    stats: ["AP", "HP", "Mana"],
+   info: "\n+350 Health +500 Mana +45 Ability Power\n時空の超越者: このアイテムの付与ステータスは、60秒ごとに体力が10、マナが30、魔力が3ずつ増加する。この効果は10回までスタックする。最大スタックになると、チャンピオンレベルが1増加する。",
    img:"img/Items/Rod_Of_Ages.png"},
   { name:"ルナーン ハリケーン", isRangedOnly:true,
-   stats: ["AS", "Crit", "MS", "On-hit"],
+   stats: ["AS", "Crit", "MSS", "On-hit"],
+   info: "\n+40% Attack Speed +25% Critical Chance +4% Movement Speed\n連撃の風: 炎の矢を放ち、対象の近くにいる敵2体を追加で攻撃する。矢はそれぞれ、(55%攻撃力)の物理ダメージと通常攻撃時効果を与える。",
    img:"img/Items/Runaan's_Hurricane.png"},
   { name:"リーライ クリスタル セプター",
    stats: ["AP", "HP"],
+   info: "\n+400 Health +65 Ability Power\nライムフロスト: 攻撃スキルが、敵に1秒間30%のスロウ効果を与える。",
    img:"img/Items/Rylai's_Crystal_Scepter.png"},
   { name:"毒蛇の牙",
    stats: ["AD", "Lethality"],
+   info: "\n+55 Attack Damage +15 Lethality\n盾崩し: 敵チャンピオンにダメージを与えると3秒間、対象が獲得するシールドの耐久値を50%(⚔)/35%(Ranged)低下させる。対象がまだ「盾崩し」の効果を受けていなかった場合は、対象が受けている全てのシールドの耐久値を50%(⚔)/35%(Ranged)低下させる。",
    img:"img/Items/Serpent's_Fang.png"},
   { name:"セリルダの怨恨", isArmorPenetration:true,
    stats: ["AD", "AH", "ArmorPen"],
+   info: "\n+45 Attack Damage +15 Ability Haste +35% Armor Penetration\n厳寒: 攻撃スキルが、体力50%未満の敵に1秒間30%のスロウ効果を与える。",
    img:"img/Items/Serylda's_Grudge.png"},
   { name:"シャドウフレイム",
    stats: ["AP", "MagicLethality"],
+   info: "\n+110 Ability Power +15 Magic Penetration\nシンダーブルーム: 体力が40%未満の敵に対する魔法ダメージおよび確定ダメージがクリティカルとなり、ダメージが20%増加する。",
    img:"img/Items/Shadowflame.png"},
   { name:"シュレリアの戦歌",
    stats: ["AP", "ManaRegen", "AH", "MS"],
+   info: "\n+50 Ability Power +25 Ability Haste +125% Base Mana Regen +4% Movement Speed \n感動的スピーチ(75s): 周囲の味方の移動速度を4秒間、30%増加させる。",
    img:"img/Items/Shurelya's_Battlesong.png"},
   { name:"ショウジンの矛",
    stats: ["AD", "HP", "AH"],
+   info: "\n+450 Health +45 Attack Damage\nドラゴンフォース: 通常スキルヘイスト25増加する。\n研ぎ澄ました意思: スキルでダメーイを与えると6秒間、チャンピオンスキルおよび自動効果で与えるダメージが3%増加する(4回スタック)。",
    img:"img/Items/Spear_Of_Shojin.png"},
   { name:"スピリット ビサージュ",
    stats: ["HP", "MR", "AH", "HPRegen"],
+   info: "\n+400 Health +50 Magic Resist +10 ability haste +100% Base Health Regen\n無限の胆力: 自身が受けるすべての回復効果とシールド耐久値が25%増加する。",
    img:"img/Items/Spirit_Visage.png"},
   { name:"フロー ウォーター スタッフ", isEnchantItem:true,
    stats: ["AP", "AH", "ManaRegen", "H/S_Power"],
+   info: "\n+35 Ability Power +15 Ability Haste +10% Heal and Shield Power +125% Base Mana Regen\n急流: 味方に体力回復効果またはシールドを付与すると、6秒間自身とその味方の魔力が45増加する。",
    img:"img/Items/Staff_Of_Flowing_Water.png"},
   { name:"スタティック シヴ",
    stats: ["AD", "AS", "MS"],
+   info: "\n+45 Attack Damage +30% Attack Speed +4% Movement Speed\nエレクトロスパーク(25-10s): 8秒以内に行う3回の通常攻撃が通常攻撃時効果で連鎖する電撃を放ち、最大5体の対象に60の魔法ダメージを与える。ミニオンとモンスターに対してはダメージが85の魔法ダメージに増加する。最初の通常攻撃を行った時点でクールダウンに入る。",
    img:"img/Items/Statikk_Shiv.png"},
   { name:"ステラックの篭手", isLifeline:true,
    stats: ["AD", "HP", "Tenacity"],
+   info: "\n+400 Health +20% Tenacity\n獲物を狙う爪: 攻撃力が(45%基本攻撃力)増加する。\n ライフライン(90s): ダメージを受け、そのダメージにより体力が最大値の30%未満になる場合、(60%増加体力)のシールドを得る。このシールドは4.5秒かけて徐々に減少する。",
    img:"img/Items/Sterak's_Gage.png"},
   { name:"ストームレイザー",
    stats: ["AD", "AS", "Crit"],
+   info: "\n+50 Attack Damage +20% Attack Speed +25% Critical Chance\nエネルギー充填: 移動と通常攻撃でエネルギー充填状態の通常攻撃を行えるようになる。\n稲妻: エネルギー充填状態の通常攻撃が100の追加魔法ダメージを与え、1.5秒間、移動速度を45%増加させる。",
    img:"img/Items/Stormrazor.png"},
   { name:"ストームサージ",
    stats: ["AP", "MagicLethality", "MS"],
+   info: "\n+90 Ability Power +15 Magic Penetration +6% Movement Speed\nストームレイダー(30s): チャンピオンに対して、2.5秒以内にその最大体力の25%にあたるダメージを与えると、対象に「スコール」を付与する。\nスコール: 2秒後、[125 + (10%魔力)]の魔法ダメージを与える。「スコール」が発動する前に対象が倒されると、周囲の敵にダメージを与える。",
    img:"img/Items/Stormsurge.png"},
   { name:"ストライドブレイカー", isTiamat:true, //抽選されるキャラを増やすために AS をあえて抜く
    stats: ["AD", "HP"], // "AS"
+   info: "\n+450 Health +40 Attack Damage +25% Attack Speed\nなぎ払い: 通常攻撃が周囲の的に(40%⚔/20%攻撃力(Ranged))の物理ダメージを与える。\n破傀の衝撃波(15s): 周囲の敵に(80%攻撃力)の物理ダメージと35%のスロウ効果を与える。命中したチャンピオン1体につき35%の増加移動速度を得る。この移動速度は3秒間かけて減衰する。",
    img:"img/Items/Stridebreaker.png"},
   { name:"サンダード スカイ",
    stats: ["AD", "HP", "AH"],
+   info: "\n+400 Health +45 Attack Damage +10 Ability Haste\nライトシールドストライク(対象ごとに10s): チャンピオンに対する最初の通常攻撃が、自身の通常クリティカルダメージの80%にあたるクリティカルダメージを与え、減少体力の[(100%基本攻撃力) + 6%]にあたる体力を回復する。",
    img:"img/Items/Sundered_Sky.png"},
   { name:"サンファイア イージス", isBamicinder:true,
    stats: ["HP", "AR", "AH"],
+   info: "\n+350 Health\ +50 Armor +10 Ability Haste\n猛火: ダメージを受けるか与えると、3秒間、周囲の敵に毎秒[20 + (1%増加体力)]の魔法ダメージを与える。",
    img:"img/Items/Sunfire_Aegis.png"},
   { name:"テルミヌス", isArmorPenetration:true, isMagicPenetration:true,
    stats: ["AD", "AS", "ArmorPen", "MagicPen", "On-hit"],
+   info: "\n+30 Attack Damage +35% Attack Speed\nシャドウ: 通常攻撃が30の追加魔法ダメージ通常攻撃時効果を与える。\nジャクスタポジション: チャンピオンに対する通常攻撃時に、通常攻撃時効果を「ライト」と「ダーク」の間で切り替える。 ・「ライト」の通常攻撃は物理防御と魔法防御を5秒間(6-8)増加させる(最大18-24)。 ・「ダーク」の通常攻撃は、物理防御貫通と魔法防御貫通を5秒間10%増加させる(最大30%)。",
    img:"img/Items/Terminus.png"},
   { name:"コレクター",
    stats: ["AD", "Crit", "Lethality"],
+   info: "\n+50 Attack Damage +25% Critical Chance +10 Lethality\n死: 体力が5%未満のチャンピオンにとどめを刺す。\n税金: チャンピオンをキルした際、25の追加ゴールドを獲得する。",
    img:"img/Items/The_Collector.png"},
   { name:"ソーンメイル",
    stats: ["HP", "AR"],
+   info: "\n+150 Health +75 Armor\n棘: 通常攻撃を受けると、攻撃者に[20 + (10%増加物理防御)]魔法ダメージを与え、対象がチャンピオンの場合は、3秒間40%の「負傷」を付与する。",
    img:"img/Items/Thornmail.png"},
   { name:"タイタン ハイドラ", isTiamat:true,
    stats: ["AD", "HP", "On-hit"],
+   info: "\n+40 Attack Damage +600 Health\nなぎ払い: 通常攻撃が(1%体力⚔)/(0.5%体力(Ranged))の物理ダメージを与え、さらに対象の背後にいる敵に(3%体力⚔)/(1.5%体力(Ranged))の物理ダメージを与える。\n巨大な三日月(10s): 次の「なぎ払い」が強化されて(4%体力⚔)/(2%体力(Ranged))の追加物理ダメージ通常攻撃時効果を与え、対象の背後にある敵に(9%体力⚔)/(4.5%体力(Ranged))の追加物理ダメージを与える。",
    img:"img/Items/Titanic_Hydra.png"},
   { name:"先人の道標", isDeadman:true,
    stats: ["HP", "AR", "MS"],
+   info: "\n+250 Health +40 Armor +4% Movement Speed\n先導: 移動中に最大20の増加移動速度を獲得する。最大速度到達時: ・軌跡が発生し、軌跡に触れた味方チャンピオンの移動速度を自身の移動速度の15%文増加させる。 ・近接攻撃チャンピオンの場合は、次の通常攻撃で対象に1秒間、50%のスロウ効果を与える。",
    img:"img/Items/Trailblazer.png"},
   { name:"トリニティ フォース", isSheen:true,
    stats: ["AD", "AS", "HP", "AH", "On-hit"],
+   info: "\n+333 Health +36 Attack Damage +30% Attack Speed +15 Ability Haste\n追撃(1.5s): スキルを使った後、次の通常攻撃で(200%基本攻撃力)の追加物理ダメージ通常攻撃時効果を与える。\n加速: 通常攻撃で2秒間、移動速度が20増加する。",
    img:"img/Items/Trinity_Force.png"},
   { name:"アンブラル グレイブ",
    stats: ["AD", "Lethality", "AS"],
+   info: "\n+60 Attack Damage +10 Ability Haste +15 Lethality\nナイトストーカー: 1秒間敵から視認されずにいると、チャンピオンに対する次の通常攻撃が追加確定ダメージを[50 + (150%脅威)]与える。\nブラックアウト(90s): 敵のステルス ワードやトラップの近くにいるとき、8秒間両方を可視化する。ワードを可視化している間、通常攻撃でそのワードに3⚔/2(Ranged)のダメージを与える。",
    img:"img/Items/Umbral_Glaive.png"},
   { name:"終わりなき絶望",
    stats: ["HP", "AR", "AH"],
+   info: "\n+400 Health +50 Armor +15 Ability Haste\n苦辛: チャンピオンとの戦闘中は、4秒ごとに周囲の敵チャンピオンに(3%増加体力)の魔法ダメージを与え、与えたダメージの250%にあたる体力を回復する。",
    img:"img/Items/Unending_Despair.png"},
   { name:"ヴォイド スタッフ", isMagicPenetration:true,
    stats: ["AP", "MagicPen"],
+   info: "\n+95 Ability Power +40% Magic Penetration",
    img:"img/Items/Void_Staff.png"},
   { name:"ボルテイク サイクロソード",
    stats: ["AD", "Lethality", "AH"],
+   info: "\n+55 Attack Damage +18 Lethality +10 Ability Haste\n刺激: ダッシュするかステルス状態になると、エネルギー充填状態のスタックが75%速く溜まる。\nファーマメント: エネルギー充填状態の通常攻撃が100の追加物理ダメージを与え、0.75秒間99%⚔/20%(Ranged)のスロウ効果を付与する。",
    img:"img/Items/Voltaic_Cyclosword.png"},
   { name:"ワーモグ アーマー",
    stats: ["HP", "HPRegen"],
+   info: "\n+1000 Health +100% Base Health Regen\nワーモグの心臓: 自身の増加体力が2000以上で、8秒間ダメージを受けずにいると、毎秒(3%体力)の体力を回復する。\nワーモグの活力: 自身のアイテム体力の12%にあたる追加体力を獲得する。",
    img:"img/Items/Warmog's_Armor.png"},
   { name:"囁きのサークレット", isEnchantItem:true,
    stats: ["HP", "H/S_Power", "ManaRegen", "Mana"],
+   info: "\n+200 Health +300 Mana +75% Base Mana Regen +8% Heal and Shield Power\n調和: 体力回復およびシールド効果が(0.5%増加マナ)%増加する。\nマナフロー(8s、最大5チャージ): スキルが命中すると最大マナが4(相手がチャンピオンの場合は2倍)増加する。最大マナが360に到達すると、このアイテムは「旋律のダイアデム」に変化する。",
    img:"img/Items/Whispering_Circlet.png"},
   { name:"冬の訪れ", isFimbulwinter:true,
    stats: ["HP", "Mana", "AH"],
+   info: "\n+550 Health +500 Mana +15 Ability Haste\n畏怖: (15%増加マナ)の体力を獲得する\nマナフロー(8s、最大4チャージ): 通常攻撃とスキルが命中すると最大マナが3(チャンピオンに対しては2倍)増加する。最大マナが360になると、「フィンブルウィンター」に変化する。",
    img:"img/Items/Winter's_Approach.png"},
   { name:"ウィッツ エンド",
    stats: ["AS", "MR", "Tenacity", "On-hit"],
+   info: "\n+50% Attack Speed +45 Magic Resist +20% Tenacity\nフレイ: 通常攻撃が45の追加魔法ダメージ通常攻撃時効果を与える。",
    img:"img/Items/Wit's_End.png"},
   { name:"妖夢の霊剣",
    stats: ["AD", "Lethality", "MS"],
+   info: "\n+55 Attack Damage +18 Lethality +4% Movement Speed\n幽鬼: 非戦闘時に移動速度が20⚔/10(Ranged)増加する。\n幽霊の歩み: 6⚔/4(Ranged)秒間、移動速度が20%⚔/15%(Ranged)増加してゴースト化する。",
    img:"img/Items/Youmuu's_Ghostblade.png"},
   { name:"ユン・タル ワイルドアロー",
    stats: ["AD", "AS", "Crit"],
+   info: "\n+50 Attack Damage +40% Attack Speed\n訓練を積めば脅威となる: 通常攻撃時にクリティカル率が恒久的に0.4%⚔/0.2%(Ranged)増加する(最大25%まで)。\n疾風: 敵チャンピオンに通常攻撃を行うと、6秒間、攻撃速度が30%増加する。通常攻撃でこのクールダウンが1秒短縮され、クリティカルの場合は2秒短縮される。",
    img:"img/Items/Yun_Tal_Wildarrows.png"},
   { name:"ジーク コンバージェンス",
    stats: ["HP", "AR", "MR", "AH"],
+   info: "\n+300 Health +25 Armor +25 Magic Resist +10 Ability Haste\n凍結燃焼: アルティメットスキルヘイストが15増加する。\n氷炎のテンペスト(45s): アルティメットスキルを使用すると自身の周りに5秒間、嵐を発生させる。この嵐は敵チャンピオンに毎秒30の魔法ダメージを与え、対象に30%のスロウ効果を付与する。",
    img:"img/Items/Zeke's_Convergence.png"},
   { name:"ゾーニャの砂時計",
    stats: ["AP", "AR"],
+   info: "\n+105 Ability Power +50 Armor\n時間停止(120s): 2.5秒間固有時時間停止状態になる。",
    img:"img/Items/Zhonya's_Hourglass.png"},
 
   //ラッキーアイテム
   { name:"Your Lucky!!", isLuckyItem:true,
+   info: "\nChoose your favorites!",
+   img:"img/Lucky/Bee_Happy_Emote.png"},
+  { name:"Your Lucky!!", isLuckyItem:true,
+   info: "\nChoose your favorites!",
+   img:"img/Lucky/Bee_Happy_Emote.png"},
+  { name:"Your Lucky!!", isLuckyItem:true,
+   info: "\nChoose your favorites!",
+   img:"img/Lucky/Bee_Happy_Emote.png"},
+  { name:"Your Lucky!!", isLuckyItem:true,
+   info: "\nChoose your favorites!",
+   img:"img/Lucky/Bee_Happy_Emote.png"},
+  { name:"Your Lucky!!", isLuckyItem:true,
+   info: "\nChoose your favorites!",
+   img:"img/Lucky/Bee_Happy_Emote.png"},
+  { name:"Your Lucky!!", isLuckyItem:true,
+   info: "\nChoose your favorites!",
    img:"img/Lucky/Bee_Happy_Emote.png"},
 
   //メイヘムアイテム
   { name:"アトマの報い", isMayhemItem:true, //Atma's Reckoning
    stats: ["HP", "Crit"],
+   info: "\n+700 Health +20% Critical Chance\n巨手: 増加体力100ごとにクリティカル率が1%増加する(最大30%まで)。",
    img:"img/Items/Mayhem_Items/Atmas_Reckoning.png"},
   { name:"スペクトラル カトラス", isMayhemItem:true, //Spectral Cutlass
    stats: ["AD", "Lethality", "MS"],
+   info: "\n+50 Attack Damage +15 Lethality +4% Movement Speed\nソウルアンカー(45s): 自身の現在地をマークする。4秒後、マークした場所に戻ってくる。「ソウルアンカー」の効果時間中は、いつでも再発動してマークした場所に早めに戻ることが出来る。",
    img:"img/Items/Mayhem_Items/Spectral_Cutlass.png"},
   { name:"破滅の儀式", isMayhemItem:true, //Rite of Ruin
    stats: ["AP", "AH"], //Crit メイジに弾かれない為に便宜上Critは入れない
+   info: "\n+55 Ability Power +10 Ability Haste +25% Critical Chance +4% Movement Speed\n憤怒と荒廃: スキルを発動すると6秒間、クリティカル率が2.5%増加する。この効果は20%までスタックする。\n残骸回収: スキルがクリティカル率と同じ確率で、自身または自身の対象の味方に3秒間、耐久値[70 - 210 + (15%魔力) + (25%攻撃力)]のシールドを付与する。",
    img:"img/Items/Mayhem_Items/Rite_of_Ruin.png"},
   { name:"花咲く夜明けの剣", isMayhemItem:true, //Sword of Blossoming Dawn
    stats: ["AP", "AH", "HP", "H/S_Power"],
+   info: "\n+45 Ability Power +200 Health +12% Heal and Shield Power +15 Ability Haste\nはつらつ: 体力回復量とシールド量1%ごとに攻撃速度が1.2%増加する。\nペパーミント: 通常攻撃時効果、付近にいる体力が最も低い味方チャンピオンの体力を[15 - 45 + (10%攻撃力) + (7%魔力)]回復させる。最も体力が低い味方が優先される。",
    img:"img/Items/Mayhem_Items/Sword_of_Blossoming_Dawn.png"},
 ];
 
@@ -2064,242 +2235,309 @@ const RUNES = [
   // --- 栄華 ---
   {name:"プレスアタック", 
     isKeystone : true,  type: "Precision",
-    img: "img/Rune/Keystone/Keystone_PressTheAttack.png"},
+    img:  "img/Rune/Keystone/Keystone_PressTheAttack.png"},
   {name:"リーサルテンポ", 
     isKeystone : true,  type: "Precision",
-    img: "img/Rune/Keystone/Keystone_LethalTempo.png"},
+    img:  "img/Rune/Keystone/Keystone_LethalTempo.png"},
   {name:"フリートフットワーク", 
     isKeystone : true,  type: "Precision",
-    img: "img/Rune/Keystone/Keystone_FleetFootwork.png"},
+    img:  "img/Rune/Keystone/Keystone_FleetFootwork.png"},
   {name:"征服者", 
     isKeystone : true, type: "Precision",
-    img: "img/Rune/Keystone/Keystone_Conqueror.png"},
+    img:  "img/Rune/Keystone/Keystone_Conqueror.png"},
   {name:"体力吸収", 
     isKeystone : false,  type: "Precision", slot: 1,
-    img: "img/Rune/SubRune/Precisiton/Absorb_Life.png"},
+    img:  "img/Rune/SubRune/Precisiton/Absorb_Life.png"},
   {name:"凱旋", 
     isKeystone : false,  type: "Precision", slot: 1,
-    img: "img/Rune/SubRune/Precisiton/Triumph.png"},
+    img:  "img/Rune/SubRune/Precisiton/Triumph.png"},
   {name:"冷静沈着", 
     isKeystone : false,  type: "Precision", slot: 1,
-    img: "img/Rune/SubRune/Precisiton/Presence_Of_Mind.png"},
+    img:  "img/Rune/SubRune/Precisiton/Presence_Of_Mind.png"},
   {name:"レジェンド：迅速", 
     isKeystone : false,  type: "Precision", slot: 2,
-    img: "img/Rune/SubRune/Precisiton/Legend_Alacrity.png"},
+    img:  "img/Rune/SubRune/Precisiton/Legend_Alacrity.png"},
   {name:"レジェンド：ヘイスト", 
     isKeystone : false,  type: "Precision", slot: 2,
-    img: "img/Rune/SubRune/Precisiton/Legend_Haste.png"},
+    img:  "img/Rune/SubRune/Precisiton/Legend_Haste.png"},
   {name:"レジェンド：血脈", 
     isKeystone : false,  type: "Precision", slot: 2,
-    img: "img/Rune/SubRune/Precisiton/Legend_Bloodline.png"},
+    img:  "img/Rune/SubRune/Precisiton/Legend_Bloodline.png"},
   {name:"最期の慈悲", 
     isKeystone : false,  type: "Precision", slot: 3,
-    img: "img/Rune/SubRune/Precisiton/Coup_De_Grace.png"},
+    img:  "img/Rune/SubRune/Precisiton/Coup_De_Grace.png"},
   {name:"切り崩し", 
     isKeystone : false,  type: "Precision", slot: 3,
-    img: "img/Rune/SubRune/Precisiton/Cut_Down.png"},
+    img:  "img/Rune/SubRune/Precisiton/Cut_Down.png"},
   {name:"背水の陣", 
     isKeystone : false,  type: "Precision", slot: 3,
-    img: "img/Rune/SubRune/Precisiton/Last_Stand.png"},
+    img:  "img/Rune/SubRune/Precisiton/Last_Stand.png"},
 
   // --- 覇道 ---
   {name:"電撃", 
     isKeystone : true, type: "Domination",
-    img: "img/Rune/Keystone/Keystone_Electrocute.png"},
+    img:  "img/Rune/Keystone/Keystone_Electrocute.png"},
   {name:"魂の収穫", 
     isKeystone : true, type: "Domination",
-    img: "img/Rune/Keystone/Keystone_DarkHarvest.png"},
+    img:  "img/Rune/Keystone/Keystone_DarkHarvest.png"},
   {name:"ヘイルブレード", 
     isKeystone : true, type: "Domination",
-    img: "img/Rune/Keystone/Keystone_HailOfBlades.png"},
+    img:  "img/Rune/Keystone/Keystone_HailOfBlades.png"},
   {name:"追い打ち", 
     isKeystone : false,  type: "Domination", slot: 1,
-    img: "img/Rune/SubRune/Domination/Cheap_Shot.png"},
+    img:  "img/Rune/SubRune/Domination/Cheap_Shot.png"},
   {name:"血の味わい", 
     isKeystone : false,  type: "Domination", slot: 1,
-    img: "img/Rune/SubRune/Domination/Taste_Of_Blood.png"},
+    img:  "img/Rune/SubRune/Domination/Taste_Of_Blood.png"},
   {name:"サドンインパクト", 
     isKeystone : false,  type: "Domination", slot: 1,
-    img: "img/Rune/SubRune/Domination/Sudden_Impact.png"},
+    img:  "img/Rune/SubRune/Domination/Sudden_Impact.png"},
   {name:"第六感", 
     isKeystone : false,  type: "Domination", slot: 2,
-    img: "img/Rune/SubRune/Domination/Sixth_Sense.png"},
+    img:  "img/Rune/SubRune/Domination/Sixth_Sense.png"},
   {name:"グリスリーメメント", 
     isKeystone : false,  type: "Domination", slot: 2,
-    img: "img/Rune/SubRune/Domination/Grisly_Mementos.png"},
+    img:  "img/Rune/SubRune/Domination/Grisly_Mementos.png"},
   {name:"ディープワード", 
     isKeystone : false,  type: "Domination", slot: 2,
-    img: "img/Rune/SubRune/Domination/Deep_Ward.png"},
+    img:  "img/Rune/SubRune/Domination/Deep_Ward.png"},
   {name:"貪欲な賞金首狩り", 
     isKeystone : false,  type: "Domination", slot: 3,
-    img: "img/Rune/SubRune/Domination/Treasure_Hunter.png"},
+    img:  "img/Rune/SubRune/Domination/Treasure_Hunter.png"},
   {name:"執拗な賞金首狩り", 
     isKeystone : false,  type: "Domination", slot: 3,
-    img: "img/Rune/SubRune/Domination/Relentless_Hunter.png"},
+    img:  "img/Rune/SubRune/Domination/Relentless_Hunter.png"},
   {name:"至極の賞金首狩り", 
     isKeystone : false,  type: "Domination", slot: 3,
-    img: "img/Rune/SubRune/Domination/Ultimate_Hunter.png"},
+    img:  "img/Rune/SubRune/Domination/Ultimate_Hunter.png"},
 
   // --- 魔道 ---
   {name:"エアリー召喚", 
     isKeystone : true, type: "Sorcery",
-    img: "img/Rune/Keystone/Keystone_SummonAery.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_SummonAery.png"},
   {name:"秘儀の彗星", 
     isKeystone : true, type: "Sorcery",
-    img: "img/Rune/Keystone/Keystone_ArcaneComet.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_ArcaneComet.png"},
   {name:"フェイズラッシュ", 
     isKeystone : true, type: "Sorcery",
-    img: "img/Rune/Keystone/Keystone_PhaseRush.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_PhaseRush.png"},
   {name:"アクシオムアルカニスト", 
     isKeystone : false,  type: "Sorcery", slot: 1,
-    img: "img/Rune/SubRune/Sorcery/Axiom_Arcanist.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Axiom_Arcanist.png"},
   {name:"マナフローバンド", 
     isKeystone : false,  type: "Sorcery", slot: 1,
-    img: "img/Rune/SubRune/Sorcery/Manaflow_Band.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Manaflow_Band.png"},
   {name:"ニンバスクローク", 
     isKeystone : false,  type: "Sorcery", slot: 1,
-    img: "img/Rune/SubRune/Sorcery/Nimbus_Cloak.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Nimbus_Cloak.png"},
   {name:"至高", 
     isKeystone : false,  type: "Sorcery", slot: 2,
-    img: "img/Rune/SubRune/Sorcery/Transcendence.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Transcendence.png"},
   {name:"追い風", 
     isKeystone : false,  type: "Sorcery", slot: 2,
-    img: "img/Rune/SubRune/Sorcery/Celerity.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Celerity.png"},
   {name:"英気集中", 
     isKeystone : false,  type: "Sorcery", slot: 2,
-    img: "img/Rune/SubRune/Sorcery/Absolute_Focus.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Absolute_Focus.png"},
   {name:"追火", 
     isKeystone : false,  type: "Sorcery", slot: 3,
-    img: "img/Rune/SubRune/Sorcery/Scorch.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Scorch.png"},
   {name:"水走り", 
     isKeystone : false,  type: "Sorcery", slot: 3,
-    img: "img/Rune/SubRune/Sorcery/Waterwalking.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Waterwalking.png"},
   {name:"強まる嵐", 
     isKeystone : false,  type: "Sorcery", slot: 3,
-    img: "img/Rune/SubRune/Sorcery/Gathering_Storm.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Sorcery/Gathering_Storm.png"},
 
   // --- 不滅 ---
   {name:"不死者の握撃", 
     isKeystone : true, type: "Resolve",
-    img: "img/Rune/Keystone/Keystone_GraspOfTheUndying.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_GraspOfTheUndying.png"},
   {name:"アフターショック", 
     isKeystone : true, type: "Resolve",
-    img: "img/Rune/Keystone/Keystone_Aftershock.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_Aftershock.png"},
   {name:"ガーディアン",
     isKeystone : true, type: "Resolve",
-    img: "img/Rune/Keystone/Keystone_Guardian.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_Guardian.png"},
   {name:"打ちこわし", 
     isKeystone : false,  type: "Resolve", slot: 1,
-    img: "img/Rune/SubRune/Resolve/Demolish.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Demolish.png"},
   {name:"生命の泉", 
     isKeystone : false,  type: "Resolve", slot: 1,
-    img: "img/Rune/SubRune/Resolve/Font_Of_Life.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Font_Of_Life.png"},
   {name:"シールドバッシュ", 
     isKeystone : false,  type: "Resolve", slot: 1,
-    img: "img/Rune/SubRune/Resolve/Shield_Bash.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Shield_Bash.png"},
   {name:"心身調整", 
     isKeystone : false,  type: "Resolve", slot: 2,
-    img: "img/Rune/SubRune/Resolve/Conditioning.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Conditioning.png"},
   {name:"息継ぎ", 
     isKeystone : false,  type: "Resolve", slot: 2,
-    img: "img/Rune/SubRune/Resolve/Second_Wind.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Second_Wind.png"},
   {name:"ボーンアーマー", 
     isKeystone : false,  type: "Resolve", slot: 2,
-    img: "img/Rune/SubRune/Resolve/Bone_Plating.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Bone_Plating.png"},
   {name:"超成長", 
     isKeystone : false,  type: "Resolve", slot: 3,
-    img: "img/Rune/SubRune/Resolve/Overgrowth.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Overgrowth.png"},
   {name:"生気付与", 
     isKeystone : false,  type: "Resolve", slot: 3,
-    img: "img/Rune/SubRune/Resolve/Revitalize.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Revitalize.png"},
   {name:"気迫", 
     isKeystone : false,  type: "Resolve", slot: 3,
-    img: "img/Rune/SubRune/Resolve/Unflinching.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Resolve/Unflinching.png"},
 
   // --- 天啓 ---
   {name:"グレイシャルオーグメント", 
     isKeystone : true, type: "Inspiration",
-    img: "img/Rune/Keystone/Keystone_GlacialAugment.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_GlacialAugment.png"},
   {name:"解放の魔導書", 
     isKeystone : true, type: "Inspiration",
-    img: "img/Rune/Keystone/Keystone_UnsealedSpellbook.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_UnsealedSpellbook.png"},
   {name:"ファーストストライク", 
     isKeystone : true, type: "Inspiration",
-    img: "img/Rune/Keystone/Keystone_FirstStrike.png"},
+    info: "\n",
+    img:  "img/Rune/Keystone/Keystone_FirstStrike.png"},
   {name:"ヘクステックフラッシュネイター", 
     isKeystone : false,  type: "Inspiration", slot: 1,
-    img: "img/Rune/SubRune/Inspiration/Hextech_Flashtraption.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Hextech_Flashtraption.png"},
   {name:"魔法の靴", 
     isKeystone : false,  type: "Inspiration", slot: 1,
-    img: "img/Rune/SubRune/Inspiration/Magical_Footwear.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Magical_Footwear.png"},
   {name:"キャッシュバック", 
     isKeystone : false,  type: "Inspiration", slot: 1,
-    img: "img/Rune/SubRune/Inspiration/Cash_Back.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Cash_Back.png"},
   {name:"トリプルトニック", 
     isKeystone : false,  type: "Inspiration", slot: 2,
-    img: "img/Rune/SubRune/Inspiration/Triple_Tonic.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Triple_Tonic.png"},
   {name:"タイムワープトニック", 
     isKeystone : false,  type: "Inspiration", slot: 2,
-    img: "img/Rune/SubRune/Inspiration/Time_Warp_Tonic.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Time_Warp_Tonic.png"},
   {name:"ビスケットデリバリー", 
     isKeystone : false,  type: "Inspiration", slot: 2,
-    img: "img/Rune/SubRune/Inspiration/Biscuit_Delivery.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Biscuit_Delivery.png"},
   {name:"宇宙の英知", 
     isKeystone : false,  type: "Inspiration", slot: 3,
-    img: "img/Rune/SubRune/Inspiration/Cosmic_Insight.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Cosmic_Insight.png"},
   {name:"疾駆", 
     isKeystone : false,  type: "Inspiration", slot: 3,
-    img: "img/Rune/SubRune/Inspiration/Approach_Velocity.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Approach_Velocity.png"},
   {name:"なんでも屋", 
     isKeystone : false,  type: "Inspiration", slot: 3,
-    img: "img/Rune/SubRune/Inspiration/Jack_Of_All_Trades.png"},
+    info: "\n",
+    img:  "img/Rune/SubRune/Inspiration/Jack_Of_All_Trades.png"},
 
   {name:"+5.4 ADまたは+9 AP", 
-  isShards : true, slot: 1,
-  img: "img/Rune/Rune_Shard/Shard_Adaptive_Force.png"},
+    isShards : true, slot: 1,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Adaptive_Force.png"},
   {name:"+10% 攻撃速度", 
-  isShards : true, slot: 1,
-  img: "img/Rune/Rune_Shard/Shard_Attack_Speed.png"},
+    isShards : true, slot: 1,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Attack_Speed.png"},
   {name:"+8 スキルヘイスト", 
-  isShards : true, slot: 1,
-  img: "img/Rune/Rune_Shard/Shard_Ability_Haste.png"},
+    isShards : true, slot: 1,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Ability_Haste.png"},
   {name:"+5.4 ADまたは+9 AP", 
-  isShards : true, slot: 2,
-  img: "img/Rune/Rune_Shard/Shard_Adaptive_Force.png"},
+    isShards : true, slot: 2,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Adaptive_Force.png"},
   {name:"+2.5% 移動速度", 
-  isShards : true, slot: 2,
-  img: "img/Rune/Rune_Shard/Shard_Movement_Speed.png"},
+    isShards : true, slot: 2,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Movement_Speed.png"},
   {name:"+10-200 HP(Lv1-20で増加)", 
-  isShards : true, slot: 2,
-  img: "img/Rune/Rune_Shard/Shard_Health_Scaling.png"},
+    isShards : true, slot: 2,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Health_Scaling.png"},
   {name:"+65 HP", 
-  isShards : true, slot: 3,
-  img: "img/Rune/Rune_Shard/Shard_Health_Base.png"},
+    isShards : true, slot: 3,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Health_Base.png"},
   {name:"+15% 行動妨害耐性&Slow耐性", 
-  isShards : true, slot: 3,
-  img: "img/Rune/Rune_Shard/Shard_Tenacity_Slow_Resist.png"},
+    isShards : true, slot: 3,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Tenacity_Slow_Resist.png"},
   {name:"+10-200 HP(Lv1-20で増加)", 
-  isShards : true, slot: 3,
-  img: "img/Rune/Rune_Shard/Shard_Health_Scaling.png"},
+    isShards : true, slot: 3,
+    info: "\n",
+    img:  "img/Rune/Rune_Shard/Shard_Health_Scaling.png"},
 
 ];
 
 /* ---  サモナースペルリスト --- */
 const SUMMONERSPELLS = [
-  {name:"バリア", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Barrier.png"},
-  {name:"クレンズ", isSummonersRift:true, isMayhem:true,  img: "img/SummonerSpell/Cleanse.png"},
-  {name:"ゴースト", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Ghost.png"},
-  {name:"ヒール", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Heal.png"},
-  {name:"イグナイト", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Ignite.png"},
-  {name:"フラッシュ", isSummonersRift:true, isMayhem:true, img: "img/SummonerSpell/Flash.png"},
+  {name:"バリア", isSummonersRift:true, isMayhem:true,
+    info: "\n一時的にシールドを獲得する。",
+    img:  "img/SummonerSpell/Barrier.png"},
+  {name:"クレンズ", isSummonersRift:true, isMayhem:true,
+    info: "\n行動妨害やサモナースペルによるデバフをすべて解除し、行動妨害耐性が増加する。",
+    img:  "img/SummonerSpell/Cleanse.png"},
+  {name:"ゴースト", isSummonersRift:true, isMayhem:true,
+    info: "\n移動速度が増加し、効果時間中はユニットの衝突判定が無視できるようになる。",
+    img:  "img/SummonerSpell/Ghost.png"},
+  {name:"ヒール", isSummonersRift:true, isMayhem:true,
+    info: "\n自身及び対象の味方チャンピオンの体力を回復し、移動速度を増加させる。",
+    img:  "img/SummonerSpell/Heal.png"},
+  {name:"イグナイト", isSummonersRift:true, isMayhem:true,
+    info: "\n対象の敵チャンピオンに継続確定ダメージを与え、効果時間中は対象の回復効果を減少させる。",
+    img:  "img/SummonerSpell/Ignite.png"},
+  {name:"フラッシュ", isSummonersRift:true, isMayhem:true,
+    info: "\n自身のチャンピオンを短い距離、指定した方向に瞬間移動させる。",
+    img:  "img/SummonerSpell/Flash.png"},
 
-  {name:"テレポート", isSummonersRift:true, img: "img/SummonerSpell/Teleport.png"},
-  {name:"イグゾースト", isSummonersRift:true, img: "img/SummonerSpell/Exhaust.png"},
-  {name:"スマイト", isJungle:true, isSummonersRift:true, img: "img/SummonerSpell/Smite.png"},
+  {name:"テレポート", isSummonersRift:true,
+    info: "\n短い詠唱後、対象指定不可になって味方ユニットの位置まで移動する。「真テレポート」にアップグレードされると移動速度が大幅に増加する。",
+    img:  "img/SummonerSpell/Teleport.png"},
+  {name:"イグゾースト", isSummonersRift:true,
+    info: "\n敵チャンピオンにスロウ効果を付与し、与ダメージを低下させる。",
+    img:  "img/SummonerSpell/Exhaust.png"},
+  {name:"スマイト", isJungle:true, isSummonersRift:true,
+    info: "\nモンスターまたはミニオンに確定ダメージを与える。",
+    img:  "img/SummonerSpell/Smite.png"},
 
   //メイヘムサモナースペル
-  {name:"マーク", isMayhem:true, img: "img/SummonerSpell/Mark.png"},
-  {name:"クラリティ", isMayhem:true, img: "img/SummonerSpell/Clarity.png"},
+  {name:"マーク", isMayhem:true,
+    info: "\n直線状の敵に向かって雪玉を投げる。敵にあたるとマークを残し、真の視界を得て、マークを付けたチャンピオンはこの対象まで素早く飛ぶことができる。",
+    img:  "img/SummonerSpell/Mark.png"},
+  {name:"クラリティ", isMayhem:true,
+    info: "\n自身及び味方チャンピオンのマナを回復する。",
+    img:  "img/SummonerSpell/Clarity.png"},
 ];
 
 /* ---  グローバル --- */
@@ -2339,6 +2577,185 @@ const addJG = document.getElementById('addJG');
 const addMid = document.getElementById('addMid');
 const addBot = document.getElementById('addBot');
 const addSup = document.getElementById('addSup');
+
+// ポップアップ要素を1つだけ作る
+function createPopupElement() {
+  let el = document.querySelector('.hover-popup');
+  if (el) return el;
+  el = document.createElement('div');
+  el.className = 'hover-popup';
+  el.innerHTML = '<img alt=""><div class="title"></div><div class="meta"></div>';
+  // 基本のスタイル（必要なら上書き）
+  el.style.display = 'flex';
+  el.style.flexDirection = 'row';
+  el.style.position = 'fixed';
+  el.style.pointerEvents = 'none';
+  el.style.width = '550px';
+  el.style.zIndex = '9999';
+  document.body.appendChild(el);
+  return el;
+}
+
+// ポップアップを画面内に収めて配置する
+function positionPopup(popup, clientX, clientY, offset = 12) {
+  const rect = popup.getBoundingClientRect();
+  let left = clientX + offset;
+  let top = clientY + offset;
+
+  if (left + rect.width > window.innerWidth - 8) {
+    left = clientX - rect.width - offset;
+    if (left < 8) left = window.innerWidth - rect.width - 8;
+  }
+  if (top + rect.height > window.innerHeight - 8) {
+    top = clientY - rect.height - offset;
+    if (top < 8) top = 8;
+  }
+
+  popup.style.left = Math.round(left) + 'px';
+  popup.style.top = Math.round(top) + 'px';
+}
+
+function attachHoverPopup(selector) {
+  const popup = createPopupElement();
+  const showDelay = 120;
+  const hideDelay = 60;
+
+  // 初期は非表示(class 'show' で表示)
+  popup.classList.remove('show');
+
+  // 既存要素に対してイベント登録
+  document.querySelectorAll(selector).forEach(el => {
+    let showTimer = null;
+    let hideTimer = null;
+
+    function onEnter(e) {
+      clearTimeout(hideTimer);
+      // データ属性から内容を取得（なければ要素のテキスト）
+      const imgSrc = el.dataset.img || '';
+      const title = el.dataset.name || el.textContent || '';
+      const meta = el.dataset.info || '';
+      console.log(el.dataset.info);
+      
+      const imgEl = popup.querySelector('img');
+      const titleEl = popup.querySelector('.title');
+      const metaEl = popup.querySelector('.meta');
+
+      if (imgEl) imgEl.src = imgSrc;
+      if (titleEl) titleEl.textContent = title;
+      if (metaEl) metaEl.textContent = meta;
+
+      // 初期位置 (イベントに clientX/Y が無ければ要素位置を使う）
+      const clientX = e.clientX ?? (el.getBoundingClientRect().left + 8);
+      const clientY = e.clientY ?? (el.getBoundingClientRect().top + 8);
+      positionPopup(popup, clientX, clientY);
+
+      clearTimeout(showTimer);
+      showTimer = setTimeout(() => popup.classList.add('show'), showDelay);
+    }
+
+    function onMove(e) {
+      // マウス追従
+      positionPopup(popup, e.clientX, e.clientY);
+    }
+
+    function onLeave() {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => popup.classList.remove('show'), hideDelay);
+    }
+
+    el.addEventListener('mouseenter', onEnter);
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+
+    // キーボードフォーカス対応（アクセシビリティ）
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    el.addEventListener('focus', (e) => {
+      const r = el.getBoundingClientRect();
+      positionPopup(popup, r.left + 8, r.top + 8);
+      popup.querySelector('.title').textContent = el.dataset.name || el.textContent || '';
+      popup.querySelector('.meta').textContent = el.dataset.info || '';
+      popup.classList.add('show');
+    });
+    el.addEventListener('blur', () => popup.classList.remove('show'));
+  });
+}
+
+function attachHoverHandlersToElement(el) {
+  if (!el) return;
+  // 重複登録を防ぐ
+  if (el.__hoverHandlersAttached) return;
+  el.__hoverHandlersAttached = true;
+
+  const popup = createPopupElement();
+  const showDelay = 120;
+  const hideDelay = 60;
+  let showTimer = null;
+  let hideTimer = null;
+
+  function showForElement(e) {
+    clearTimeout(hideTimer);
+    // 要素優先でデータを取得、なければグローバル selectedChampion を参照
+    const imgSrc = el.dataset.img || (window.selectedChampion && window.selectedChampion.img) || (el.querySelector('img')?.src) || '';
+    const title = el.dataset.name || (window.selectedChampion && window.selectedChampion.name) || el.textContent.trim();
+    const meta = el.dataset.info || (window.selectedChampion && `${window.selectedChampion.isRanged ? 'レンジ' : 'Melee'}; ${window.selectedChampion.hasHardCC ? 'ハードCCあり' : ''}`) || '';
+    console.log(el.dataset.info);
+    
+    
+    const imgEl = popup.querySelector('img');
+    const titleEl = popup.querySelector('.title');
+    const metaEl = popup.querySelector('.meta');
+
+    if (imgEl) imgEl.src = imgSrc;
+    if (titleEl) titleEl.textContent = title;
+    if (metaEl) metaEl.textContent = meta;
+
+    const clientX = e.clientX ?? (el.getBoundingClientRect().left + 8);
+    const clientY = e.clientY ?? (el.getBoundingClientRect().top + 8);
+    positionPopup(popup, clientX, clientY);
+
+    clearTimeout(showTimer);
+    showTimer = setTimeout(() => popup.classList.add('show'), showDelay);
+  }
+
+  function moveHandler(e) {
+    positionPopup(popup, e.clientX, e.clientY);
+  }
+
+  function leaveHandler() {
+    clearTimeout(showTimer);
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => popup.classList.remove('show'), hideDelay);
+  }
+
+  el.addEventListener('mouseenter', showForElement);
+  el.addEventListener('mousemove', moveHandler);
+  el.addEventListener('mouseleave', leaveHandler);
+
+  // キーボードフォーカス対応
+  if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+  el.addEventListener('focus', (e) => {
+    // focus では要素位置に固定表示
+    const r = el.getBoundingClientRect();
+    positionPopup(popup, r.left + 8, r.top + 8);
+    // 直接表示
+    popup.querySelector('.title').textContent = el.dataset.name || el.textContent.trim();
+    popup.querySelector('.meta').textContent = el.dataset.info || '';
+    popup.classList.add('show');
+  });
+  el.addEventListener('blur', () => popup.classList.remove('show'));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  attachHoverPopup('.role-card');
+  attachHoverPopup('.character-card');
+  attachHoverPopup('.rune-card');
+  attachHoverPopup('.subrune-card');
+  attachHoverPopup('.runeshard-card');
+  attachHoverPopup('.summonerSpell-card');
+  attachHoverPopup('.startItem-card');
+  attachHoverPopup('.item-card');
+});
 
 /* --- レーン決定 --- */
 function rouletteRole() {
@@ -2384,8 +2801,11 @@ function DrawRole(selected){
   selected.forEach((la, l) => {
     const card = document.createElement('div');
     card.className = 'role-card';
-    card.innerHTML = `<img src="${la.img}" alt="${la.name}">`;
+    card.innerHTML = `
+      <img src="${la.img}" alt="${la.name}"><div><strong>Role: ${la.name}</strong></div>
+      <div class="small"></div>`;
     container.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
   
   return container;
@@ -2394,22 +2814,36 @@ function DrawRole(selected){
 
 /* --- キャラクター決定 --- */
 function rouletteCharacter() {
-   if (isCharacterRoulette && !isCharacterRoulette.checked) {
+  if (isCharacterRoulette && !isCharacterRoulette.checked) {
     return null;
   }
 
   let pool = [...currentCharacters];
   const selected = [];
 
-  const champName = document.getElementById("ChampionFind").value.trim().toLowerCase();
+  const enteredName = document.getElementById("ChampionFind").value.trim().toLowerCase();
+  function normalize(s) {
+  return String(s || '')
+    .normalize('NFKC')
+    .trim()
+    .toLowerCase()
+    .replace(/[=\u0027\u2019・_]/g, '') // = ' ’ ・ _ を除去
+    .replace(/\s+/g, ' '); // 連続空白を単一に
+}
+  const champName = normalize(enteredName);
 
   if (champName != "") {
     const matches = pool.filter(ch => {
-      const name = (ch.name || "").toLowerCase();
-      const img = (ch.img || "").toLowerCase();
-      return (
-        name.includes(champName) ||
-        img.includes(champName));
+      if (ch.searchKey) {
+        const sk = normalize(ch.searchKey);
+
+        if (sk.includes(q)) 
+          return true;
+      }
+
+      const name = (normalize(ch.name) || "").toLowerCase();
+      const img = (normalize(ch.img) || "").toLowerCase();
+      return (name.includes(champName) || img.includes(champName));
     });
 
     //入力された文字列に応じてチャンピオンを探す
@@ -2455,8 +2889,9 @@ function DrawCharacter(selected){
     card.innerHTML = `<img src="${cha.img}" alt="${cha.name}"><div><strong>${"Champion"}. ${cha.name}</strong></div>
       <div class="small"></div>`;
     container.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
-  
+
   return container;
 
 
@@ -2585,6 +3020,7 @@ function DrawKeyStone(selected){
       <img src="${ru.img}" alt="${ru.name}"><div><strong>Rune: ${ru.name}</strong></div>
       <div class="small"></div>`;
     container.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
 
   return container;
@@ -2603,8 +3039,10 @@ function DrawSubRune(subSelected){
     const card = document.createElement('div');
     card.className = 'subrune-card';
     card.innerHTML = `
-      <img src="${ru.img}">`;
+      <img src="${ru.img}" alt="${ru.name}"><div><strong>Rune: ${ru.name}</strong></div>
+      <div class="small"></div>`;
     container.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
 
   return container;
@@ -2626,6 +3064,7 @@ function DrawRuneShard(shardSelected){
       <img src="${ru.img}" alt="${ru.name}">
       <div><strong>Shard: ${ru.name}</strong></div>`;
     container.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
   
   return container;
@@ -2689,9 +3128,10 @@ function DrawSummonerSpell(selected){
   selected.forEach((sum, s) => {
     const card = document.createElement('div');
     card.className = 'summonerSpell-card';
-    card.innerHTML = `<img src="${sum.img}" alt="${sum.name}"><div><strong>${"SummonerSpell"}. ${sum.name}</strong></div>
+    card.innerHTML = `<img src="${sum.img}" alt="${sum.name}"><div><strong>${"SummonerSpell"}. ${sum.name}</strong></div>${sum.info}</strong></div>
       <div class="small"></div>`;
     container.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
 
   return container;
@@ -2740,8 +3180,9 @@ function DrawStartItem(selected){
   selected.forEach((la, l) => {
     const card = document.createElement('div');
     card.className = 'startItem-card';
-    card.innerHTML = `<img src="${la.img}" alt="${la.name}"><div><strong>${"StartItem"}: ${la.name}</strong></div>`;
+    card.innerHTML = `<img src="${la.img}" alt="${la.name}"><div><strong>${la.name}</strong></div><strong>${la.info}</strong></div><div class="small"></div>`;
     container.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
 
   return container;
@@ -2968,8 +3409,10 @@ function createRow(cards) {
     let label = '通常';
     if (it.isBoot) label = 'ブーツ';
     if (it.isSupport) label = 'サポート';
-    card.innerHTML = `<img src="${it.img}" alt="${it.name}"><div><strong>${label}: ${it.name}</strong></div><div class="small"></div>`;
+    card.innerHTML = `<img src="${it.img}" alt="${it.name}"><div><strong>${it.name}</strong></div><strong>${it.info}</strong></div><div class="small"></div>`;
+    console.log(it.info);
     div.appendChild(card);
+    attachHoverHandlersToElement(card);
   });
   return div;
 }
@@ -3086,16 +3529,11 @@ function drawSet(set, index) {
   resultArea.appendChild(LoLItemRouletteUI);
 }
 
+
 /* --- クリックイベント --- */
 genBuildBtn.addEventListener('click', RouletteStart);
 
 </script>
 
 </body>
-
 </html>
-
-
-
-
-
